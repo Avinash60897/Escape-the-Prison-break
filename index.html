@@ -82,7 +82,6 @@
   .overlay.hidden{display:none}
   @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 
-  /* ================= MENU / AUTH BACKDROP ================= */
   #menu, #auth{
     background:
       radial-gradient(ellipse 40% 34% at 12% 4%, rgba(255,190,90,0.16), transparent 60%),
@@ -202,11 +201,13 @@
   .btn{background:linear-gradient(180deg,#332a20,#1d1812);color:#e9e2d4;
     border:1px solid rgba(255,180,90,.2);
     padding:11px 26px;border-radius:10px;font-size:13px;letter-spacing:.1em;cursor:pointer;
-    text-transform:uppercase;transition:.16s;font-family:inherit;touch-action:manipulation;
+    text-transform:uppercase;transition:.16s;font-family:inherit;
+    touch-action:manipulation;-webkit-appearance:none;appearance:none;
     box-shadow:0 4px 14px rgba(0,0,0,.35), 0 1px 0 rgba(255,220,160,.06) inset}
   .btn:hover{background:linear-gradient(180deg,#453a2c,#26201a);
     border-color:rgba(255,180,90,.6);color:#ffb85c;transform:translateY(-1px)}
   .btn:active{transform:translateY(0)}
+  .btn:disabled{opacity:.55;cursor:not-allowed;transform:none}
   .btn.big{padding:14px 44px;font-size:15px;
     background:linear-gradient(180deg,#d99b32,#8a5d12);
     border-color:#ffb85c;color:#1a1208;font-weight:700;
@@ -229,7 +230,6 @@
     box-shadow:0 0 8px #ff2a2a;animation:blink 1.6s ease-in-out infinite}
   @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
 
-  /* ================= AUTH ================= */
   .auth-field{text-align:left;margin-bottom:14px}
   .auth-field label{display:block;font-size:10px;letter-spacing:.18em;color:#ffb85c;
     text-transform:uppercase;margin-bottom:6px;font-weight:600}
@@ -237,7 +237,8 @@
     border:1px solid rgba(255,180,90,.25);
     color:#e9e2d4;padding:12px 14px;border-radius:9px;font-family:inherit;
     font-size:14px;letter-spacing:.05em;transition:.15s;
-    -webkit-user-select:text;user-select:text}
+    -webkit-user-select:text;user-select:text;
+    -webkit-appearance:none;appearance:none}
   .auth-field input:focus{outline:none;border-color:#ffb85c;
     background:rgba(20,14,10,.9);box-shadow:0 0 0 3px rgba(255,180,90,.15)}
   .auth-field input::placeholder{color:#5a4e3e}
@@ -245,6 +246,7 @@
     margin-bottom:8px;padding-left:4px;letter-spacing:.02em}
   .auth-error.show{animation:shake .3s ease}
   @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+  .auth-info{color:#7a6e5c;font-size:11px;margin-top:10px;line-height:1.5;text-align:center}
 
   #user-bar{display:flex;align-items:center;gap:8px;
     background:rgba(20,14,10,.85);border:1px solid rgba(255,180,90,.28);
@@ -258,7 +260,8 @@
     border:1px solid rgba(255,90,90,.45);color:#ff8a8a;
     padding:6px 10px;border-radius:7px;font-size:10px;font-weight:600;
     letter-spacing:.1em;text-transform:uppercase;cursor:pointer;
-    font-family:inherit;transition:.15s}
+    font-family:inherit;transition:.15s;touch-action:manipulation;
+    -webkit-appearance:none;appearance:none}
   #signout-btn:hover{background:linear-gradient(180deg,#5a1e1e,#2a0c0c);color:#ffb0b0}
 
   #level-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin:16px 0}
@@ -268,6 +271,7 @@
     font-size:13px;font-weight:700;cursor:pointer;display:flex;flex-direction:column;
     align-items:center;justify-content:center;gap:1px;transition:.14s;font-family:inherit;
     position:relative;touch-action:manipulation;padding:2px;overflow:hidden;
+    -webkit-appearance:none;appearance:none;
     box-shadow:0 2px 6px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,220,160,.06)}
   .lvl-cell:before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;
     background-image: repeating-linear-gradient(90deg,
@@ -296,7 +300,8 @@
     border:1px solid rgba(255,180,90,.1)}
   .tab{background:transparent;border:none;color:#8a7a68;padding:8px 16px;
     border-radius:8px;font-size:11px;cursor:pointer;font-weight:600;
-    letter-spacing:.12em;text-transform:uppercase;font-family:inherit;transition:.15s}
+    letter-spacing:.12em;text-transform:uppercase;font-family:inherit;transition:.15s;
+    touch-action:manipulation;-webkit-appearance:none;appearance:none}
   .tab:hover{color:#cfc4b4}
   .tab.active{background:linear-gradient(180deg,#4a3a2a,#26201a);color:#ffb85c;
     box-shadow:0 2px 8px rgba(0,0,0,.5), 0 0 0 1px rgba(255,180,90,.35)}
@@ -317,7 +322,8 @@
   #keypad-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
   .kbtn{background:linear-gradient(180deg,#332a20,#1d1812);border:1px solid rgba(255,180,90,.2);
     color:#dfd4c0;font-size:19px;padding:14px 0;border-radius:9px;cursor:pointer;
-    font-family:inherit;transition:.1s;touch-action:manipulation}
+    font-family:inherit;transition:.1s;touch-action:manipulation;
+    -webkit-appearance:none;appearance:none}
   .kbtn:hover{background:linear-gradient(180deg,#463a2c,#26201a);color:#ffb85c}
   .kbtn:active{transform:scale(.95)}
   .kbtn.wide{grid-column:span 3;font-size:13px;letter-spacing:.15em;padding:10px 0}
@@ -356,6 +362,7 @@
     border:2px solid rgba(255,180,90,.6);color:#ffb85c;font-size:20px;font-weight:700;
     font-family:inherit;cursor:pointer;backdrop-filter:blur(8px);touch-action:manipulation;
     display:flex;align-items:center;justify-content:center;transition:.1s;
+    -webkit-appearance:none;appearance:none;
     box-shadow:0 6px 20px rgba(0,0,0,.5)}
   .touch-btn:active{transform:scale(.9);background:rgba(255,180,90,.35)}
   .touch-btn.active{background:rgba(255,180,90,.6);color:#1a1208;
@@ -390,7 +397,7 @@
       <div id="level-tag">Cell <b id="level-num">1</b> / 100 &nbsp;·&nbsp; <span id="level-name">—</span></div>
       <div id="lock-status">—</div>
       <div id="timer-tag">00:00</div>
-      <button id="reveal-btn">⏭ Reveal &amp; Skip <kbd>R</kbd></button>
+      <button id="reveal-btn" type="button">⏭ Reveal &amp; Skip <kbd>R</kbd></button>
     </div>
     <div id="inv"></div>
   </div>
@@ -426,8 +433,8 @@
     <p class="sub" style="margin:8px 0 20px">PRISON BREAK · ACCESS TERMINAL</p>
 
     <div class="tab-row" style="max-width:320px;margin:0 auto 22px">
-      <button class="tab active" data-authtab="signin" style="flex:1">Sign In</button>
-      <button class="tab" data-authtab="signup" style="flex:1">Create Account</button>
+      <button class="tab active" type="button" data-authtab="signin" style="flex:1">Sign In</button>
+      <button class="tab" type="button" data-authtab="signup" style="flex:1">Create Account</button>
     </div>
 
     <!-- SIGN IN -->
@@ -435,15 +442,16 @@
       <div class="auth-field">
         <label for="signin-user">Inmate ID (username)</label>
         <input type="text" id="signin-user" maxlength="24" autocomplete="username"
-               autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="e.g. Rookie_42">
+               autocapitalize="none" autocorrect="off" spellcheck="false"
+               inputmode="text" enterkeyhint="next" placeholder="e.g. Rookie_42">
       </div>
       <div class="auth-field">
         <label for="signin-pass">Access Code (password)</label>
         <input type="password" id="signin-pass" maxlength="64" autocomplete="current-password"
-               placeholder="••••••••">
+               enterkeyhint="go" placeholder="••••••••">
       </div>
       <div id="signin-error" class="auth-error"></div>
-      <button class="btn big" id="signin-btn" style="width:100%">Sign In</button>
+      <button class="btn big" id="signin-btn" type="button" style="width:100%">Sign In</button>
     </div>
 
     <!-- SIGN UP -->
@@ -451,29 +459,33 @@
       <div class="auth-field">
         <label for="signup-user">Inmate ID (username)</label>
         <input type="text" id="signup-user" maxlength="24" autocomplete="username"
-               autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="3–24 characters">
+               autocapitalize="none" autocorrect="off" spellcheck="false"
+               inputmode="text" enterkeyhint="next" placeholder="3–24 characters">
       </div>
       <div class="auth-field">
         <label for="signup-pass">Access Code (password)</label>
         <input type="password" id="signup-pass" maxlength="64" autocomplete="new-password"
-               placeholder="At least 4 characters">
+               enterkeyhint="next" placeholder="At least 4 characters">
       </div>
       <div class="auth-field">
         <label for="signup-pass2">Confirm Access Code</label>
         <input type="password" id="signup-pass2" maxlength="64" autocomplete="new-password"
-               placeholder="Repeat the code">
+               enterkeyhint="done" placeholder="Repeat the code">
       </div>
       <div id="signup-error" class="auth-error"></div>
-      <button class="btn big" id="signup-btn" style="width:100%">Create Account</button>
-      <p style="color:#7a6e5c;font-size:11px;margin-top:10px;line-height:1.5">
-        First account on this device inherits any existing offline progress.
+      <button class="btn big" id="signup-btn" type="button" style="width:100%">Create Account</button>
+      <p class="auth-info">
+        Accounts are stored on this device.<br>
+        Progress is saved automatically.
       </p>
     </div>
 
-    <p style="color:#7a6e5c;font-size:11px;margin-top:16px;line-height:1.6">
-      Accounts are stored locally in this browser.<br>
-      No server, no email — just your device.
-    </p>
+    <div style="text-align:right;margin-top:14px">
+      <button class="btn small" id="server-config-btn" type="button"
+              style="padding:6px 12px;font-size:10px;background:transparent;border-color:rgba(255,180,90,.2)">
+        ⚙ Server
+      </button>
+    </div>
   </div>
 </div>
 
@@ -514,21 +526,21 @@
         <div id="user-bar">
           <span>👤</span>
           <span class="uname" id="user-name">—</span>
-          <button id="signout-btn">Sign Out</button>
+          <button id="signout-btn" type="button">Sign Out</button>
         </div>
       </div>
     </div>
 
     <div class="tab-row">
-      <button class="tab active" data-tab="levels">Cells</button>
-      <button class="tab" data-tab="daily">Daily Lockdown</button>
-      <button class="tab" data-tab="howto">Escape Briefing</button>
+      <button class="tab active" type="button" data-tab="levels">Cells</button>
+      <button class="tab" type="button" data-tab="daily">Daily Lockdown</button>
+      <button class="tab" type="button" data-tab="howto">Escape Briefing</button>
     </div>
 
     <div id="tab-levels">
       <div id="level-grid"></div>
       <div class="btn-row">
-        <button class="btn small danger" id="reset-btn">Reset Progress</button>
+        <button class="btn small danger" id="reset-btn" type="button">Reset Progress</button>
       </div>
     </div>
 
@@ -540,7 +552,7 @@
         Every inmate in the world gets the same challenge today.
       </p>
       <div id="daily-status" style="font-size:13px;color:#9a8a78;margin-bottom:16px">—</div>
-      <button class="btn big" id="daily-play">Attempt Daily</button>
+      <button class="btn big" id="daily-play" type="button">Attempt Daily</button>
     </div>
 
     <div id="tab-howto" style="display:none;text-align:left">
@@ -563,7 +575,7 @@
         <b style="color:#ffb85c">Stuck?</b> Press <kbd>R</kbd> to auto-solve the cell.
         Revealed cells give 0 points and 1 star.<br><br>
         <b style="color:#ffb85c">Your account:</b> All progress is tied to your inmate ID.
-        Sign out and back in on this device to restore it.
+        Sign out and back in to restore it.
       </p>
     </div>
   </div>
@@ -581,8 +593,8 @@
       <span>Best</span><span id="stat-best">—</span>
     </div>
     <div class="btn-row">
-      <button class="btn big" id="next-level-btn">Next Cell</button>
-      <button class="btn" id="menu-btn">Main Menu</button>
+      <button class="btn big" id="next-level-btn" type="button">Next Cell</button>
+      <button class="btn" id="menu-btn" type="button">Main Menu</button>
     </div>
   </div>
 </div>
@@ -593,8 +605,8 @@
     <h2 id="note-title">NOTE</h2>
     <p id="note-text"></p>
     <div class="btn-row">
-      <button class="btn" id="note-zoom">Magnify 🔍</button>
-      <button class="btn" id="note-close">Close</button>
+      <button class="btn" id="note-zoom" type="button">Magnify 🔍</button>
+      <button class="btn" id="note-close" type="button">Close</button>
     </div>
   </div>
 </div>
@@ -604,7 +616,7 @@
   <div class="panel" style="max-width:340px">
     <div id="keypad-display">____</div>
     <div id="keypad-grid"></div>
-    <button class="btn" id="keypad-close">Cancel</button>
+    <button class="btn" id="keypad-close" type="button">Cancel</button>
   </div>
 </div>
 
@@ -614,9 +626,9 @@
     <h2>PAUSED</h2>
     <p class="sub" style="margin-bottom:14px">The guard is looking the other way... for now.</p>
     <div class="btn-row" style="margin-top:14px">
-      <button class="btn big" id="resume-btn">Resume</button>
-      <button class="btn danger" id="pause-reveal-btn">⏭ Reveal &amp; Skip <kbd style="background:rgba(0,0,0,.5);border:1px solid rgba(255,90,90,.4);padding:1px 5px;border-radius:4px;font-size:10px;margin-left:4px;font-family:inherit">R</kbd></button>
-      <button class="btn" id="pause-menu-btn">Main Menu</button>
+      <button class="btn big" id="resume-btn" type="button">Resume</button>
+      <button class="btn danger" id="pause-reveal-btn" type="button">⏭ Reveal &amp; Skip <kbd style="background:rgba(0,0,0,.5);border:1px solid rgba(255,90,90,.4);padding:1px 5px;border-radius:4px;font-size:10px;margin-left:4px;font-family:inherit">R</kbd></button>
+      <button class="btn" id="pause-menu-btn" type="button">Main Menu</button>
     </div>
   </div>
 </div>
@@ -626,9 +638,9 @@
   <div id="joystick-zone"></div>
   <div id="joystick"><div id="joystick-knob"></div></div>
   <div id="action-buttons">
-    <button class="touch-btn" data-action="interact">⚡</button>
-    <button class="touch-btn" data-action="flashlight">🔦</button>
-    <button class="touch-btn" data-action="magnify">🔍</button>
+    <button class="touch-btn" type="button" data-action="interact">⚡</button>
+    <button class="touch-btn" type="button" data-action="flashlight">🔦</button>
+    <button class="touch-btn" type="button" data-action="magnify">🔍</button>
   </div>
 </div>
 
@@ -636,8 +648,23 @@
 <script>
 /* =========================================================================
    ESCAPE 100 — PRISON BREAK
-   100 cells · account system · 1-3 unique puzzle locks each
+   100 cells · local-first accounts (optional cloud sync) · 14 mechanisms
    ========================================================================= */
+
+/* ---------- CLOUD API CONFIG (optional) ----------
+   Leave blank to run in fully-offline mode.
+   To enable cross-device sync, set your deployed server URL either here
+   (window.ESCAPE_API_URL), via the ⚙ Server button on the auth screen,
+   or by running in the console:
+     localStorage.setItem('escape100_api_url', 'https://your-server.com')
+*/
+const API_URL = (function(){
+  try {
+    return (window.ESCAPE_API_URL ||
+            localStorage.getItem('escape100_api_url') ||
+            '').replace(/\/$/,'');
+  } catch(e){ return ''; }
+})();
 
 const canvas = document.getElementById('game');
 const isTouch = ('ontouchstart' in window) || navigator.maxTouchPoints > 0;
@@ -673,166 +700,228 @@ function SHUFFLE(rng, arr) {
   return a;
 }
 
-/* =========================================================================
-   ACCOUNT SYSTEM
-   ========================================================================= */
-const ACCOUNTS_KEY = 'escape100_accounts_v1';
-const SESSION_KEY  = 'escape100_session_v1';
-const LEGACY_STORE = 'escape100_prison_v3';
-const LEGACY_DAILY = 'escape100_prison_daily_v3';
+/* ============================================================
+   ROBUST ACCOUNT SYSTEM — local-first, optional cloud sync
+   ============================================================ */
+const ACCOUNTS_KEY = 'escape100_accounts_v2';
+const SESSION_KEY  = 'escape100_session_v2';
+const API_URL_KEY  = 'escape100_api_url';
+const TOKEN_KEY    = 'escape100_token_v1';
 
-let currentUser = null;   // username string when signed in, else null
+let currentUser = null;
+let authToken = null;
+let _scores = {};
+let _daily  = {};
+let _syncTimer = null;
+let usingCloud = false;
 
-/* --- Accounts list --- */
-function getAccounts() {
-  try { return JSON.parse(localStorage.getItem(ACCOUNTS_KEY)) || []; }
-  catch (e) { return []; }
-}
-function saveAccounts(list) {
-  try { localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(list)); } catch (e) {}
-}
-function findAccount(username) {
-  if (!username) return null;
-  const lc = username.toLowerCase();
-  return getAccounts().find(a => a.username.toLowerCase() === lc) || null;
-}
+/* --- Safe storage helpers --- */
+function lsGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+function lsSet(k,v){ try{ localStorage.setItem(k,v); return true; }catch(e){ return false; } }
+function lsDel(k){ try{ localStorage.removeItem(k); }catch(e){} }
+function getApiUrl(){ return (API_URL || '').trim().replace(/\/$/,''); }
 
-/* --- Session --- */
-function getSession() {
-  try { return localStorage.getItem(SESSION_KEY) || null; } catch (e) { return null; }
-}
-function setSession(username) {
-  try { localStorage.setItem(SESSION_KEY, username); } catch (e) {}
-}
-function clearSession() {
-  try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
-}
-
-/* --- Hashing --- */
-function randomSalt() {
-  const a = new Uint8Array(16);
-  if (window.crypto && crypto.getRandomValues) crypto.getRandomValues(a);
-  else for (let i = 0; i < a.length; i++) a[i] = Math.floor(Math.random() * 256);
-  return Array.from(a).map(b => b.toString(16).padStart(2, '0')).join('');
-}
-async function hashPassword(password, salt) {
-  const combined = salt + '::' + password;
-  if (window.crypto && crypto.subtle && window.isSecureContext !== false) {
-    try {
-      const data = new TextEncoder().encode(combined);
-      const buf = await crypto.subtle.digest('SHA-256', data);
-      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
-    } catch (e) { /* fall through */ }
-  }
-  // Fallback: simple djb2 hash (not crypto-secure, but fine for local play)
+/* --- Hashing (no crypto APIs required → works on every device) --- */
+function simpleHash(str){
   let h1 = 5381, h2 = 52711;
-  for (let i = 0; i < combined.length; i++) {
-    const c = combined.charCodeAt(i);
+  for (let i = 0; i < str.length; i++){
+    const c = str.charCodeAt(i);
     h1 = ((h1 << 5) + h1 + c) >>> 0;
     h2 = ((h2 << 5) + h2 ^ c) >>> 0;
   }
-  return 'fb' + h1.toString(16) + h2.toString(16);
+  return 'h' + h1.toString(16) + h2.toString(16);
+}
+function makeHash(password, salt){
+  let h = simpleHash(salt + '::' + password);
+  h = simpleHash(h + '::' + salt);
+  h = simpleHash(h + '::' + password);
+  return h;
+}
+function randomSalt(){
+  let s = '';
+  try {
+    const a = new Uint8Array(16);
+    if (window.crypto && crypto.getRandomValues) crypto.getRandomValues(a);
+    else for (let i=0;i<16;i++) a[i] = Math.floor(Math.random()*256);
+    for (let i=0;i<16;i++) s += a[i].toString(16).padStart(2,'0');
+  } catch(e){
+    for (let i=0;i<32;i++) s += Math.floor(Math.random()*16).toString(16);
+  }
+  return s;
 }
 
-/* --- Register / Login --- */
-async function registerAccount(username, password) {
-  if (!username || username.length < 3) return { ok: false, error: 'Inmate ID must be at least 3 characters.' };
-  if (username.length > 24) return { ok: false, error: 'Inmate ID too long (max 24).' };
-  if (!/^[A-Za-z0-9_\-\.]+$/.test(username)) return { ok: false, error: 'Only letters, numbers, _ - . allowed.' };
-  if (!password || password.length < 4) return { ok: false, error: 'Access code must be at least 4 characters.' };
-  if (findAccount(username)) return { ok: false, error: 'That Inmate ID is already registered.' };
+/* --- Local account storage --- */
+function getLocalAccounts(){
+  try { return JSON.parse(lsGet(ACCOUNTS_KEY) || '[]'); } catch(e){ return []; }
+}
+function saveLocalAccounts(list){ return lsSet(ACCOUNTS_KEY, JSON.stringify(list)); }
+function findLocalAccount(u){
+  if (!u) return null;
+  const lc = u.toLowerCase();
+  return getLocalAccounts().find(a => a.username.toLowerCase() === lc) || null;
+}
+function loadLocalProgress(username){
+  const s = lsGet('escape100_prison_v3_' + username);
+  const d = lsGet('escape100_prison_daily_v3_' + username);
+  try { _scores = s ? JSON.parse(s) : {}; } catch(e){ _scores = {}; }
+  try { _daily  = d ? JSON.parse(d) : {}; } catch(e){ _daily  = {}; }
+}
 
-  const salt = randomSalt();
-  const hash = await hashPassword(password, salt);
-  const accounts = getAccounts();
-  const isFirst = accounts.length === 0;
-  accounts.push({
-    username,
-    salt,
-    hash,
-    createdAt: Date.now(),
-    lastLogin: Date.now()
-  });
-  saveAccounts(accounts);
+/* --- Cloud helper --- */
+async function cloudCall(path, opts){
+  const url = getApiUrl();
+  if (!url) throw new Error('Cloud not configured');
+  const headers = Object.assign({ 'Content-Type': 'application/json' }, (opts && opts.headers) || {});
+  if (authToken) headers['Authorization'] = 'Bearer ' + authToken;
+  const ctrl = new AbortController();
+  const tid = setTimeout(() => ctrl.abort(), 8000);
+  let res;
+  try {
+    res = await fetch(url + path, Object.assign({}, opts, { headers, signal: ctrl.signal }));
+  } finally { clearTimeout(tid); }
+  let data = null;
+  try { data = await res.json(); } catch(e){}
+  if (!res.ok) throw new Error((data && data.error) || ('Server error ' + res.status));
+  return data;
+}
 
-  // First-ever account: inherit any offline progress from before accounts existed
-  if (isFirst) {
+/* --- Register --- */
+async function registerAccount(username, password){
+  // Validate first (no network needed)
+  if (!username || username.length < 3)   return { ok:false, error:'Inmate ID must be at least 3 characters.' };
+  if (username.length > 24)                return { ok:false, error:'Inmate ID too long (max 24).' };
+  if (!/^[A-Za-z0-9_\-\.]+$/.test(username)) return { ok:false, error:'Only letters, numbers, _ - . allowed.' };
+  if (!password || password.length < 4)    return { ok:false, error:'Access code must be at least 4 characters.' };
+
+  // Try cloud first if configured
+  if (getApiUrl()){
     try {
-      const legacyScores = localStorage.getItem(LEGACY_STORE);
-      const legacyDaily = localStorage.getItem(LEGACY_DAILY);
-      if (legacyScores && !localStorage.getItem(LEGACY_STORE + '_' + username)) {
-        localStorage.setItem(LEGACY_STORE + '_' + username, legacyScores);
+      const r = await cloudCall('/api/register', { method:'POST',
+        body: JSON.stringify({ username, password }) });
+      authToken = r.token; currentUser = r.username;
+      lsSet(TOKEN_KEY, r.token); lsSet(SESSION_KEY, r.username);
+      _scores = (r.progress && r.progress.scores) || {};
+      _daily  = (r.progress && r.progress.daily)  || {};
+      usingCloud = true;
+      return { ok:true, username:r.username, mode:'cloud' };
+    } catch (e){
+      const msg = String(e && e.message || '');
+      if (/already registered|too short|too long|allowed/i.test(msg)) {
+        return { ok:false, error: msg };
       }
-      if (legacyDaily && !localStorage.getItem(LEGACY_DAILY + '_' + username)) {
-        localStorage.setItem(LEGACY_DAILY + '_' + username, legacyDaily);
-      }
-    } catch (e) {}
+      console.warn('Cloud register failed, using local:', msg);
+    }
   }
 
+  // Local registration
+  if (findLocalAccount(username)) return { ok:false, error:'That Inmate ID is already registered.' };
+  const salt = randomSalt();
+  const hash = makeHash(password, salt);
+  const accounts = getLocalAccounts();
+  accounts.push({ username, salt, hash, createdAt: Date.now(), lastLogin: Date.now() });
+  if (!saveLocalAccounts(accounts)) {
+    return { ok:false, error:'Could not save account. Storage may be full or disabled.' };
+  }
   currentUser = username;
-  setSession(username);
-  return { ok: true, username };
+  lsSet(SESSION_KEY, username);
+  loadLocalProgress(username);
+  usingCloud = false;
+  return { ok:true, username, mode:'local' };
 }
 
-async function loginAccount(username, password) {
-  if (!username) return { ok: false, error: 'Enter your Inmate ID.' };
-  if (!password) return { ok: false, error: 'Enter your Access Code.' };
-  const acc = findAccount(username);
-  if (!acc) return { ok: false, error: 'No account found with that ID.' };
-  const hash = await hashPassword(password, acc.salt);
-  if (hash !== acc.hash) return { ok: false, error: 'Incorrect access code.' };
+/* --- Login --- */
+async function loginAccount(username, password){
+  if (!username) return { ok:false, error:'Enter your Inmate ID.' };
+  if (!password) return { ok:false, error:'Enter your Access Code.' };
+
+  if (getApiUrl()){
+    try {
+      const r = await cloudCall('/api/login', { method:'POST',
+        body: JSON.stringify({ username, password }) });
+      authToken = r.token; currentUser = r.username;
+      lsSet(TOKEN_KEY, r.token); lsSet(SESSION_KEY, r.username);
+      _scores = (r.progress && r.progress.scores) || {};
+      _daily  = (r.progress && r.progress.daily)  || {};
+      usingCloud = true;
+      return { ok:true, username:r.username, mode:'cloud' };
+    } catch (e){
+      const msg = String(e && e.message || '');
+      if (/No account|Incorrect/i.test(msg)) return { ok:false, error: msg };
+      console.warn('Cloud login failed, using local:', msg);
+    }
+  }
+
+  const acc = findLocalAccount(username);
+  if (!acc) return { ok:false, error:'No account found with that ID.' };
+  const hash = makeHash(password, acc.salt);
+  if (hash !== acc.hash) return { ok:false, error:'Incorrect access code.' };
+
   acc.lastLogin = Date.now();
-  const accounts = getAccounts();
+  const accounts = getLocalAccounts();
   const idx = accounts.findIndex(a => a.username.toLowerCase() === acc.username.toLowerCase());
-  if (idx >= 0) { accounts[idx].lastLogin = acc.lastLogin; saveAccounts(accounts); }
+  if (idx >= 0){ accounts[idx].lastLogin = acc.lastLogin; saveLocalAccounts(accounts); }
+
   currentUser = acc.username;
-  setSession(acc.username);
-  return { ok: true, username: acc.username };
+  lsSet(SESSION_KEY, acc.username);
+  loadLocalProgress(acc.username);
+  usingCloud = false;
+  return { ok:true, username:acc.username, mode:'local' };
 }
 
-function signOut() {
-  clearSession();
-  currentUser = null;
+/* --- Sign out --- */
+function signOut(){
+  if (currentUser && !authToken){
+    lsSet('escape100_prison_v3_' + currentUser, JSON.stringify(_scores));
+    lsSet('escape100_prison_daily_v3_' + currentUser, JSON.stringify(_daily));
+  } else if (authToken){
+    syncNow().catch(()=>{});
+  }
+  currentUser = null; authToken = null; usingCloud = false;
+  lsDel(SESSION_KEY); lsDel(TOKEN_KEY);
+  _scores = {}; _daily = {};
 }
 
-/* =========================================================================
-   USER-NAMESPACED STORAGE
-   ========================================================================= */
-const STORE_KEY = LEGACY_STORE;
-const DAILY_KEY = LEGACY_DAILY;
+/* --- Sync --- */
+function scheduleSync(){
+  if (getApiUrl() && authToken){
+    clearTimeout(_syncTimer);
+    _syncTimer = setTimeout(syncNow, 600);
+  } else if (currentUser){
+    clearTimeout(_syncTimer);
+    _syncTimer = setTimeout(() => {
+      lsSet('escape100_prison_v3_' + currentUser, JSON.stringify(_scores));
+      lsSet('escape100_prison_daily_v3_' + currentUser, JSON.stringify(_daily));
+    }, 400);
+  }
+}
+async function syncNow(){
+  if (!authToken || !getApiUrl()) return;
+  try {
+    await cloudCall('/api/progress', { method:'POST',
+      body: JSON.stringify({ scores:_scores, daily:_daily }) });
+  } catch (e){ console.warn('Sync failed:', e.message); }
+}
 
-function userStoreKey(base) {
-  return currentUser ? (base + '_' + currentUser) : (base + '_guest');
+/* --- Progress accessors --- */
+function loadScores()  { return _scores; }
+function saveScores(s) { _scores = s; scheduleSync(); }
+function getBest(idx)  { return _scores[idx] || null; }
+function setBest(idx, data){
+  const cur = _scores[idx];
+  if (!cur || data.score > cur.score){ _scores[idx] = data; scheduleSync(); }
 }
-function loadScores() {
-  try { return JSON.parse(localStorage.getItem(userStoreKey(STORE_KEY))) || {}; }
-  catch (e) { return {}; }
-}
-function saveScores(s) {
-  try { localStorage.setItem(userStoreKey(STORE_KEY), JSON.stringify(s)); } catch (e) {}
-}
-function getBest(idx) { return loadScores()[idx] || null; }
-function setBest(idx, data) {
-  const s = loadScores(); const cur = s[idx];
-  if (!cur || data.score > cur.score) { s[idx] = data; saveScores(s); }
-}
-function totalScore() { const s = loadScores(); let t = 0; for (const k in s) t += s[k].score || 0; return t; }
-function totalStars() { const s = loadScores(); let t = 0; for (const k in s) t += s[k].stars || 0; return t; }
+function totalScore(){ let t=0; for (const k in _scores) t += _scores[k].score||0; return t; }
+function totalStars(){ let t=0; for (const k in _scores) t += _scores[k].stars||0; return t; }
+function loadDaily()  { return _daily; }
+function saveDaily(d) { _daily = d; scheduleSync(); }
 
-function loadDaily() {
-  try { return JSON.parse(localStorage.getItem(userStoreKey(DAILY_KEY))) || {}; }
-  catch (e) { return {}; }
-}
-function saveDaily(d) {
-  try { localStorage.setItem(userStoreKey(DAILY_KEY), JSON.stringify(d)); } catch (e) {}
-}
-function todayKey() {
+function todayKey(){
   const d = new Date();
-  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
 }
-function dailySeed() {
+function dailySeed(){
   const d = new Date();
-  return (d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate()) ^ 0x5f3759df;
+  return (d.getFullYear()*10000 + (d.getMonth()+1)*100 + d.getDate()) ^ 0x5f3759df;
 }
 
 /* ---------- TEXTURE HELPERS ---------- */
@@ -2830,15 +2919,18 @@ function buildKeypadGrid() {
   keypadGrid.innerHTML = '';
   for (let n = 1; n <= 9; n++) {
     const b = document.createElement('button');
+    b.type = 'button';
     b.className = 'kbtn'; b.textContent = n;
     b.onclick = () => keypadDigit(String(n));
     keypadGrid.appendChild(b);
   }
   const clr = document.createElement('button');
+  clr.type = 'button';
   clr.className = 'kbtn wide'; clr.textContent = 'CLEAR';
   clr.onclick = () => { keypadEntry = ''; keypadDisplay.textContent = '____'; };
   keypadGrid.appendChild(clr);
   const ent = document.createElement('button');
+  ent.type = 'button';
   ent.className = 'kbtn wide'; ent.textContent = 'ENTER';
   ent.onclick = keypadSubmit;
   keypadGrid.appendChild(ent);
@@ -2877,6 +2969,7 @@ function buildLevelGrid() {
   const scores = loadScores();
   for (let i = 1; i <= 100; i++) {
     const b = document.createElement('button');
+    b.type = 'button';
     b.className = 'lvl-cell';
     const rec = scores[i];
     if (rec) b.classList.add('done');
@@ -2909,8 +3002,13 @@ function refreshDailyStatus() {
 document.getElementById('daily-play').onclick = () => { menuEl.classList.add('hidden'); startLevel(0, true); };
 document.getElementById('reset-btn').onclick = () => {
   if (confirm('Reset all progress and scores for ' + (currentUser || 'Guest') + '?')) {
-    localStorage.removeItem(userStoreKey(STORE_KEY));
-    localStorage.removeItem(userStoreKey(DAILY_KEY));
+    _scores = {};
+    _daily = {};
+    if (currentUser) {
+      lsDel('escape100_prison_v3_' + currentUser);
+      lsDel('escape100_prison_daily_v3_' + currentUser);
+    }
+    scheduleSync();
     buildLevelGrid(); refreshMenuStats(); refreshDailyStatus();
   }
 };
@@ -2961,7 +3059,7 @@ function startLevel(index, isDaily) {
 }
 
 /* =========================================================================
-   AUTH UI
+   AUTH UI  — tablet-proof handlers with try/catch + input preservation
    ========================================================================= */
 const signinErrorEl = document.getElementById('signin-error');
 const signupErrorEl = document.getElementById('signup-error');
@@ -2993,13 +3091,19 @@ async function doSignIn() {
   const u = signinUserEl.value.trim();
   const p = signinPassEl.value;
   signinErrorEl.textContent = '';
+  if (!u) { showAuthError(signinErrorEl, 'Enter your Inmate ID.'); return; }
+  if (!p) { showAuthError(signinErrorEl, 'Enter your Access Code.'); return; }
   const btn = document.getElementById('signin-btn');
+  if (btn.disabled) return;
+  const oldLabel = btn.textContent;
   btn.disabled = true; btn.textContent = 'Signing in...';
-  const res = await loginAccount(u, p);
-  btn.disabled = false; btn.textContent = 'Sign In';
-  if (!res.ok) { showAuthError(signinErrorEl, res.error); return; }
+  let res;
+  try { res = await loginAccount(u, p); }
+  catch (e) { res = { ok:false, error:(e && e.message) || 'Unexpected error. Try again.' }; }
+  btn.disabled = false; btn.textContent = oldLabel;
+  if (!res || !res.ok) { showAuthError(signinErrorEl, (res && res.error) || 'Sign in failed.'); return; }
   signinPassEl.value = '';
-  toast('Welcome back, ' + res.username);
+  toast('Welcome back, ' + res.username + (res.mode === 'local' ? ' (local)' : ''));
   showMenu();
 }
 
@@ -3008,27 +3112,42 @@ async function doSignUp() {
   const p = signupPassEl.value;
   const p2 = signupPass2El.value;
   signupErrorEl.textContent = '';
+  if (!u || !p) { showAuthError(signupErrorEl, 'Fill in all fields.'); return; }
   if (p !== p2) { showAuthError(signupErrorEl, 'Access codes do not match.'); return; }
   const btn = document.getElementById('signup-btn');
+  if (btn.disabled) return;
+  const oldLabel = btn.textContent;
   btn.disabled = true; btn.textContent = 'Creating...';
-  const res = await registerAccount(u, p);
-  btn.disabled = false; btn.textContent = 'Create Account';
-  if (!res.ok) { showAuthError(signupErrorEl, res.error); return; }
+  let res;
+  try { res = await registerAccount(u, p); }
+  catch (e) { res = { ok:false, error:(e && e.message) || 'Unexpected error. Try again.' }; }
+  btn.disabled = false; btn.textContent = oldLabel;
+  if (!res || !res.ok) { showAuthError(signupErrorEl, (res && res.error) || 'Sign up failed.'); return; }
+  // Success! Only now do we clear fields
   signupUserEl.value = ''; signupPassEl.value = ''; signupPass2El.value = '';
-  toast('Account created — welcome, ' + res.username);
+  toast('Account created — welcome, ' + res.username + (res.mode === 'local' ? ' (local)' : ''));
   showMenu();
 }
 
 document.getElementById('signin-btn').onclick = doSignIn;
 document.getElementById('signup-btn').onclick = doSignUp;
-signinPassEl.addEventListener('keydown', e => { if (e.key === 'Enter') doSignIn(); });
-signinUserEl.addEventListener('keydown', e => { if (e.key === 'Enter') signinPassEl.focus(); });
-signupPass2El.addEventListener('keydown', e => { if (e.key === 'Enter') doSignUp(); });
-signupUserEl.addEventListener('keydown', e => { if (e.key === 'Enter') signupPassEl.focus(); });
-signupPassEl.addEventListener('keydown', e => { if (e.key === 'Enter') signupPass2El.focus(); });
+signinPassEl.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); doSignIn(); } });
+signinUserEl.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); signinPassEl.focus(); } });
+signupPass2El.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); doSignUp(); } });
+signupUserEl.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); signupPassEl.focus(); } });
+signupPassEl.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); signupPass2El.focus(); } });
 
-document.getElementById('signout-btn').onclick = () => {
+/* Trim on blur only — never mid-typing */
+[signinUserEl, signupUserEl].forEach(el => {
+  el.addEventListener('blur', () => {
+    const t = el.value.trim();
+    if (t !== el.value) el.value = t;
+  });
+});
+
+document.getElementById('signout-btn').onclick = async () => {
   if (!confirm('Sign out of ' + (currentUser || 'this account') + '?\nYour progress is saved.')) return;
+  if (_syncTimer) { clearTimeout(_syncTimer); _syncTimer = null; await syncNow(); }
   signOut();
   menuEl.classList.add('hidden');
   authEl.classList.remove('hidden');
@@ -3036,6 +3155,24 @@ document.getElementById('signout-btn').onclick = () => {
   signinPassEl.value = '';
   signinUserEl.focus();
   toast('Signed out');
+};
+
+document.getElementById('server-config-btn').onclick = () => {
+  const cur = lsGet(API_URL_KEY) || '';
+  const url = prompt(
+    'Cloud server URL (leave empty for offline mode):\n' +
+    'Example: https://escape100-xyz.onrender.com',
+    cur
+  );
+  if (url === null) return;
+  if (url.trim() === '') {
+    lsDel(API_URL_KEY);
+    toast('Offline mode — reloading');
+  } else {
+    lsSet(API_URL_KEY, url.trim().replace(/\/$/, ''));
+    toast('Server URL saved — reloading');
+  }
+  setTimeout(() => location.reload(), 800);
 };
 
 /* ---------- INPUT ---------- */
@@ -3230,18 +3367,45 @@ if (isTouch) {
   document.getElementById('magnify-hint').style.opacity = '0';
 }
 
-/* Restore session if a valid account exists */
-(function bootSession() {
-  const sess = getSession();
-  if (sess && findAccount(sess)) {
+/* Restore session if a valid account exists (cloud or local) */
+(async function bootSession() {
+  const sess = lsGet(SESSION_KEY);
+  const tok = lsGet(TOKEN_KEY);
+
+  // Cloud session restore
+  if (sess && tok && getApiUrl()) {
+    authToken = tok;
     currentUser = sess;
-    showMenu();
-  } else {
-    clearSession();
-    authEl.classList.remove('hidden');
-    menuEl.classList.add('hidden');
-    signinUserEl.focus();
+    try {
+      const p = await cloudCall('/api/progress', { method:'GET' });
+      _scores = (p && p.scores) || {};
+      _daily  = (p && p.daily)  || {};
+      usingCloud = true;
+      showMenu();
+      return;
+    } catch (e) {
+      console.warn('Session restore failed, falling back to local:', e.message);
+      authToken = null;
+      lsDel(TOKEN_KEY);
+    }
   }
+
+  // Local session restore
+  if (sess && findLocalAccount(sess)) {
+    currentUser = sess;
+    loadLocalProgress(sess);
+    usingCloud = false;
+    showMenu();
+    return;
+  }
+
+  // No session → auth screen
+  lsDel(SESSION_KEY);
+  lsDel(TOKEN_KEY);
+  currentUser = null; authToken = null;
+  authEl.classList.remove('hidden');
+  menuEl.classList.add('hidden');
+  signinUserEl.focus();
 })();
 
 animate();
