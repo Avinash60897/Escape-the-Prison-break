@@ -82,8 +82,8 @@
   .overlay.hidden{display:none}
   @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 
-  /* ================= LIVE PRISON MENU ================= */
-  #menu{
+  /* ================= MENU / AUTH BACKDROP ================= */
+  #menu, #auth{
     background:
       radial-gradient(ellipse 40% 34% at 12% 4%, rgba(255,190,90,0.16), transparent 60%),
       radial-gradient(ellipse 40% 34% at 90% 96%, rgba(255,70,50,0.16), transparent 60%),
@@ -92,7 +92,6 @@
     position:fixed;
     background-blend-mode: screen, screen, normal, normal;
   }
-  /* Cell bars */
   .menu-bars{position:absolute;inset:0;pointer-events:none;z-index:0;
     background-image:
       repeating-linear-gradient(90deg,
@@ -106,8 +105,6 @@
       rgba(0,0,0,.85) 196px, rgba(0,0,0,.85) 202px,
       rgba(255,200,120,.12) 202px, rgba(255,200,120,.12) 204px);
     mix-blend-mode: multiply}
-
-  /* Barbed wire top */
   .menu-barbed{position:absolute;top:0;left:0;right:0;height:60px;pointer-events:none;z-index:1;
     background-image:
       radial-gradient(circle at 8px 50%, #8a8478 2px, transparent 3px),
@@ -119,30 +116,22 @@
     transform: rotate(-1deg);
     filter: drop-shadow(0 2px 4px rgba(0,0,0,.9));
     opacity:.85}
-
-  /* Warning stripes bottom */
   .menu-stripe{position:absolute;bottom:0;left:0;right:0;height:22px;pointer-events:none;z-index:1;
     background: repeating-linear-gradient(-45deg,
       #b07a10 0, #b07a10 20px,
       #0e0a06 20px, #0e0a06 40px);
     opacity:.7;
     box-shadow: inset 0 3px 8px rgba(0,0,0,.8)}
-
-  /* NEW: Live alarm pulse (top) */
   .menu-alarm{position:absolute;top:0;left:0;right:0;height:160px;pointer-events:none;z-index:1;
     background:linear-gradient(180deg, rgba(255,60,30,.32), transparent 80%);
     animation:alarmPulse 2.4s ease-in-out infinite;mix-blend-mode:screen}
   @keyframes alarmPulse{0%,100%{opacity:.28}45%{opacity:.85}}
-
-  /* NEW: Live sweeping searchlight */
   .menu-spot{position:absolute;inset:0;pointer-events:none;z-index:1;overflow:hidden}
   .menu-spot:before{
     content:'';position:absolute;top:-30%;left:-40%;width:60%;height:160%;
     background:conic-gradient(from 180deg at 50% 0%,
-      transparent 0deg,
-      rgba(255,220,150,.22) 18deg,
-      rgba(255,220,150,.42) 24deg,
-      rgba(255,220,150,.22) 30deg,
+      transparent 0deg, rgba(255,220,150,.22) 18deg,
+      rgba(255,220,150,.42) 24deg, rgba(255,220,150,.22) 30deg,
       transparent 48deg);
     transform-origin:50% 0%;
     animation:spotSweep 11s ease-in-out infinite;
@@ -150,21 +139,14 @@
   @keyframes spotSweep{
     0%,100%{transform:translateX(0) rotate(-30deg)}
     50%{transform:translateX(140%) rotate(30deg)}}
-
-  /* NEW: Live scanlines */
   .menu-scanlines{position:absolute;inset:0;pointer-events:none;z-index:1;opacity:.16;
     background:repeating-linear-gradient(0deg,
       transparent 0, transparent 3px,
       rgba(0,0,0,.85) 3px, rgba(0,0,0,.85) 4px);
     animation:scanShift 7s linear infinite;
     mix-blend-mode:multiply}
-  @keyframes scanShift{
-    from{background-position:0 0}
-    to{background-position:0 500px}}
-
-  /* NEW: Live CCTV HUD (top-right) */
-  .cctv-hud{
-    position:absolute;top:22px;right:26px;z-index:3;text-align:right;
+  @keyframes scanShift{from{background-position:0 0}to{background-position:0 500px}}
+  .cctv-hud{position:absolute;top:22px;right:26px;z-index:3;text-align:right;
     font-family:'Courier New',monospace;color:#7effa0;
     text-shadow:0 0 8px rgba(126,255,160,.65);
     pointer-events:none;font-size:12px;letter-spacing:.12em}
@@ -174,16 +156,13 @@
   .cctv-hud .cctv-dot{width:10px;height:10px;border-radius:50%;background:#ff3b3b;
     box-shadow:0 0 12px #ff3b3b;animation:cctvBlink 1.2s ease-in-out infinite}
   @keyframes cctvBlink{0%,100%{opacity:1}50%{opacity:.25}}
-  .cctv-hud .cctv-clock{font-size:22px;font-weight:700;color:#7effa0;margin:2px 0;
-    letter-spacing:.08em}
+  .cctv-hud .cctv-clock{font-size:22px;font-weight:700;color:#7effa0;margin:2px 0;letter-spacing:.08em}
   .cctv-hud .cctv-label{font-size:10px;color:#7effa0;opacity:.65;letter-spacing:.2em}
   @media(max-width:640px){
     .cctv-hud{top:14px;right:14px}
     .cctv-hud .cctv-clock{font-size:16px}
     .cctv-hud .cctv-label{font-size:8px}
   }
-
-  /* Lock icon */
   .menu-lock{position:absolute;top:96px;right:24px;width:84px;height:84px;
     pointer-events:none;z-index:2;opacity:.16;
     filter: drop-shadow(0 0 20px rgba(255,180,90,.4));
@@ -191,7 +170,6 @@
   @keyframes lockGlow{0%,100%{opacity:.14}50%{opacity:.26}}
   @media(max-width:640px){ .menu-lock{width:54px;height:54px;top:78px;right:14px} }
 
-  /* Panel */
   .panel{background:linear-gradient(160deg,rgba(28,24,18,.92),rgba(12,10,8,.96));
     border:1px solid rgba(255,180,90,.18);border-radius:16px;padding:26px 30px;
     box-shadow:
@@ -202,7 +180,6 @@
     animation:rise .32s cubic-bezier(.2,1.3,.4,1);max-height:92vh;overflow-y:auto;
     backdrop-filter:blur(20px) saturate(1.1)}
   @keyframes rise{from{transform:translateY(20px) scale(.96);opacity:0}to{transform:none;opacity:1}}
-
   .panel h1{font-size:42px;letter-spacing:.22em;font-weight:900;
     background:linear-gradient(120deg,#ffb85c 0%,#ffd9a0 40%,#ff7a2d 70%,#ffb85c 100%);
     background-size:200% 100%;
@@ -251,6 +228,38 @@
   .mugshot .dot{width:8px;height:8px;border-radius:50%;background:#ff2a2a;
     box-shadow:0 0 8px #ff2a2a;animation:blink 1.6s ease-in-out infinite}
   @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
+
+  /* ================= AUTH ================= */
+  .auth-field{text-align:left;margin-bottom:14px}
+  .auth-field label{display:block;font-size:10px;letter-spacing:.18em;color:#ffb85c;
+    text-transform:uppercase;margin-bottom:6px;font-weight:600}
+  .auth-field input{width:100%;background:rgba(10,8,6,.7);
+    border:1px solid rgba(255,180,90,.25);
+    color:#e9e2d4;padding:12px 14px;border-radius:9px;font-family:inherit;
+    font-size:14px;letter-spacing:.05em;transition:.15s;
+    -webkit-user-select:text;user-select:text}
+  .auth-field input:focus{outline:none;border-color:#ffb85c;
+    background:rgba(20,14,10,.9);box-shadow:0 0 0 3px rgba(255,180,90,.15)}
+  .auth-field input::placeholder{color:#5a4e3e}
+  .auth-error{color:#ff5b5b;font-size:12px;text-align:left;min-height:18px;
+    margin-bottom:8px;padding-left:4px;letter-spacing:.02em}
+  .auth-error.show{animation:shake .3s ease}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+
+  #user-bar{display:flex;align-items:center;gap:8px;
+    background:rgba(20,14,10,.85);border:1px solid rgba(255,180,90,.28);
+    padding:5px 5px 5px 14px;border-radius:10px;
+    box-shadow:0 4px 12px rgba(0,0,0,.5);font-size:11px;
+    letter-spacing:.08em;text-transform:uppercase;color:#cfc4b4;
+    white-space:nowrap;margin-top:6px}
+  #user-bar .uname{color:#ffb85c;font-weight:700;max-width:140px;
+    overflow:hidden;text-overflow:ellipsis}
+  #signout-btn{background:linear-gradient(180deg,#2a1c1c,#1a0e0e);
+    border:1px solid rgba(255,90,90,.45);color:#ff8a8a;
+    padding:6px 10px;border-radius:7px;font-size:10px;font-weight:600;
+    letter-spacing:.1em;text-transform:uppercase;cursor:pointer;
+    font-family:inherit;transition:.15s}
+  #signout-btn:hover{background:linear-gradient(180deg,#5a1e1e,#2a0c0c);color:#ffb0b0}
 
   #level-grid{display:grid;grid-template-columns:repeat(10,1fr);gap:5px;margin:16px 0}
   @media(max-width:640px){#level-grid{grid-template-columns:repeat(5,1fr);gap:4px}}
@@ -393,8 +402,83 @@
 <div id="magnify-hint">Hold G · magnify</div>
 <div id="reveal-hint">Stuck? Press R · Reveal &amp; Skip</div>
 
+<!-- ===================== AUTH SCREEN ===================== -->
+<div id="auth" class="overlay">
+  <div class="menu-bars"></div>
+  <div class="menu-spot"></div>
+  <div class="menu-alarm"></div>
+  <div class="menu-scanlines"></div>
+  <div class="menu-barbed"></div>
+  <div class="menu-stripe"></div>
+
+  <div class="cctv-hud">
+    <div class="cctv-rec"><span class="cctv-dot"></span>REC</div>
+    <div class="cctv-clock" id="auth-cctv-clock">--:--:--</div>
+    <div class="cctv-label">CAM 01 · INMATE REGISTRY</div>
+  </div>
+
+  <div class="panel" style="max-width:440px">
+    <div class="mugshot">
+      <span class="dot"></span>
+      INMATE REGISTRY · SECTOR 7
+    </div>
+    <h1 style="font-size:36px;letter-spacing:.2em;margin:0">ESCAPE 100</h1>
+    <p class="sub" style="margin:8px 0 20px">PRISON BREAK · ACCESS TERMINAL</p>
+
+    <div class="tab-row" style="max-width:320px;margin:0 auto 22px">
+      <button class="tab active" data-authtab="signin" style="flex:1">Sign In</button>
+      <button class="tab" data-authtab="signup" style="flex:1">Create Account</button>
+    </div>
+
+    <!-- SIGN IN -->
+    <div id="auth-signin">
+      <div class="auth-field">
+        <label for="signin-user">Inmate ID (username)</label>
+        <input type="text" id="signin-user" maxlength="24" autocomplete="username"
+               autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="e.g. Rookie_42">
+      </div>
+      <div class="auth-field">
+        <label for="signin-pass">Access Code (password)</label>
+        <input type="password" id="signin-pass" maxlength="64" autocomplete="current-password"
+               placeholder="••••••••">
+      </div>
+      <div id="signin-error" class="auth-error"></div>
+      <button class="btn big" id="signin-btn" style="width:100%">Sign In</button>
+    </div>
+
+    <!-- SIGN UP -->
+    <div id="auth-signup" style="display:none">
+      <div class="auth-field">
+        <label for="signup-user">Inmate ID (username)</label>
+        <input type="text" id="signup-user" maxlength="24" autocomplete="username"
+               autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="3–24 characters">
+      </div>
+      <div class="auth-field">
+        <label for="signup-pass">Access Code (password)</label>
+        <input type="password" id="signup-pass" maxlength="64" autocomplete="new-password"
+               placeholder="At least 4 characters">
+      </div>
+      <div class="auth-field">
+        <label for="signup-pass2">Confirm Access Code</label>
+        <input type="password" id="signup-pass2" maxlength="64" autocomplete="new-password"
+               placeholder="Repeat the code">
+      </div>
+      <div id="signup-error" class="auth-error"></div>
+      <button class="btn big" id="signup-btn" style="width:100%">Create Account</button>
+      <p style="color:#7a6e5c;font-size:11px;margin-top:10px;line-height:1.5">
+        First account on this device inherits any existing offline progress.
+      </p>
+    </div>
+
+    <p style="color:#7a6e5c;font-size:11px;margin-top:16px;line-height:1.6">
+      Accounts are stored locally in this browser.<br>
+      No server, no email — just your device.
+    </p>
+  </div>
+</div>
+
 <!-- ===================== LIVE MENU ===================== -->
-<div id="menu" class="overlay">
+<div id="menu" class="overlay hidden">
   <div class="menu-bars"></div>
   <div class="menu-spot"></div>
   <div class="menu-alarm"></div>
@@ -425,7 +509,14 @@
         <h1 style="font-size:40px;letter-spacing:.2em;margin:0">ESCAPE 100</h1>
         <div class="sub" style="margin:6px 0 0;text-align:left">PRISON BREAK · 100 CELLS · NO MERCY</div>
       </div>
-      <div id="scoreboard">SCORE <b id="total-score">0</b><br><span style="color:#7a6e5c;font-size:10px">STARS <b id="total-stars" style="font-size:12px">0</b> / 300 ★</span></div>
+      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:0">
+        <div id="scoreboard">SCORE <b id="total-score">0</b><br><span style="color:#7a6e5c;font-size:10px">STARS <b id="total-stars" style="font-size:12px">0</b> / 300 ★</span></div>
+        <div id="user-bar">
+          <span>👤</span>
+          <span class="uname" id="user-name">—</span>
+          <button id="signout-btn">Sign Out</button>
+        </div>
+      </div>
     </div>
 
     <div class="tab-row">
@@ -470,7 +561,9 @@
         <b style="color:#ffb85c">Combinations:</b> Every cell is a unique shuffle of 14 mechanisms.
         No two cells share the same puzzle combination.<br><br>
         <b style="color:#ffb85c">Stuck?</b> Press <kbd>R</kbd> to auto-solve the cell.
-        Revealed cells give 0 points and 1 star.
+        Revealed cells give 0 points and 1 star.<br><br>
+        <b style="color:#ffb85c">Your account:</b> All progress is tied to your inmate ID.
+        Sign out and back in on this device to restore it.
       </p>
     </div>
   </div>
@@ -543,7 +636,7 @@
 <script>
 /* =========================================================================
    ESCAPE 100 — PRISON BREAK
-   100 cells · 1-3 unique puzzle locks each · guaranteed solvable
+   100 cells · account system · 1-3 unique puzzle locks each
    ========================================================================= */
 
 const canvas = document.getElementById('game');
@@ -578,6 +671,168 @@ function SHUFFLE(rng, arr) {
   const a = arr.slice();
   for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rng() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
   return a;
+}
+
+/* =========================================================================
+   ACCOUNT SYSTEM
+   ========================================================================= */
+const ACCOUNTS_KEY = 'escape100_accounts_v1';
+const SESSION_KEY  = 'escape100_session_v1';
+const LEGACY_STORE = 'escape100_prison_v3';
+const LEGACY_DAILY = 'escape100_prison_daily_v3';
+
+let currentUser = null;   // username string when signed in, else null
+
+/* --- Accounts list --- */
+function getAccounts() {
+  try { return JSON.parse(localStorage.getItem(ACCOUNTS_KEY)) || []; }
+  catch (e) { return []; }
+}
+function saveAccounts(list) {
+  try { localStorage.setItem(ACCOUNTS_KEY, JSON.stringify(list)); } catch (e) {}
+}
+function findAccount(username) {
+  if (!username) return null;
+  const lc = username.toLowerCase();
+  return getAccounts().find(a => a.username.toLowerCase() === lc) || null;
+}
+
+/* --- Session --- */
+function getSession() {
+  try { return localStorage.getItem(SESSION_KEY) || null; } catch (e) { return null; }
+}
+function setSession(username) {
+  try { localStorage.setItem(SESSION_KEY, username); } catch (e) {}
+}
+function clearSession() {
+  try { localStorage.removeItem(SESSION_KEY); } catch (e) {}
+}
+
+/* --- Hashing --- */
+function randomSalt() {
+  const a = new Uint8Array(16);
+  if (window.crypto && crypto.getRandomValues) crypto.getRandomValues(a);
+  else for (let i = 0; i < a.length; i++) a[i] = Math.floor(Math.random() * 256);
+  return Array.from(a).map(b => b.toString(16).padStart(2, '0')).join('');
+}
+async function hashPassword(password, salt) {
+  const combined = salt + '::' + password;
+  if (window.crypto && crypto.subtle && window.isSecureContext !== false) {
+    try {
+      const data = new TextEncoder().encode(combined);
+      const buf = await crypto.subtle.digest('SHA-256', data);
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    } catch (e) { /* fall through */ }
+  }
+  // Fallback: simple djb2 hash (not crypto-secure, but fine for local play)
+  let h1 = 5381, h2 = 52711;
+  for (let i = 0; i < combined.length; i++) {
+    const c = combined.charCodeAt(i);
+    h1 = ((h1 << 5) + h1 + c) >>> 0;
+    h2 = ((h2 << 5) + h2 ^ c) >>> 0;
+  }
+  return 'fb' + h1.toString(16) + h2.toString(16);
+}
+
+/* --- Register / Login --- */
+async function registerAccount(username, password) {
+  if (!username || username.length < 3) return { ok: false, error: 'Inmate ID must be at least 3 characters.' };
+  if (username.length > 24) return { ok: false, error: 'Inmate ID too long (max 24).' };
+  if (!/^[A-Za-z0-9_\-\.]+$/.test(username)) return { ok: false, error: 'Only letters, numbers, _ - . allowed.' };
+  if (!password || password.length < 4) return { ok: false, error: 'Access code must be at least 4 characters.' };
+  if (findAccount(username)) return { ok: false, error: 'That Inmate ID is already registered.' };
+
+  const salt = randomSalt();
+  const hash = await hashPassword(password, salt);
+  const accounts = getAccounts();
+  const isFirst = accounts.length === 0;
+  accounts.push({
+    username,
+    salt,
+    hash,
+    createdAt: Date.now(),
+    lastLogin: Date.now()
+  });
+  saveAccounts(accounts);
+
+  // First-ever account: inherit any offline progress from before accounts existed
+  if (isFirst) {
+    try {
+      const legacyScores = localStorage.getItem(LEGACY_STORE);
+      const legacyDaily = localStorage.getItem(LEGACY_DAILY);
+      if (legacyScores && !localStorage.getItem(LEGACY_STORE + '_' + username)) {
+        localStorage.setItem(LEGACY_STORE + '_' + username, legacyScores);
+      }
+      if (legacyDaily && !localStorage.getItem(LEGACY_DAILY + '_' + username)) {
+        localStorage.setItem(LEGACY_DAILY + '_' + username, legacyDaily);
+      }
+    } catch (e) {}
+  }
+
+  currentUser = username;
+  setSession(username);
+  return { ok: true, username };
+}
+
+async function loginAccount(username, password) {
+  if (!username) return { ok: false, error: 'Enter your Inmate ID.' };
+  if (!password) return { ok: false, error: 'Enter your Access Code.' };
+  const acc = findAccount(username);
+  if (!acc) return { ok: false, error: 'No account found with that ID.' };
+  const hash = await hashPassword(password, acc.salt);
+  if (hash !== acc.hash) return { ok: false, error: 'Incorrect access code.' };
+  acc.lastLogin = Date.now();
+  const accounts = getAccounts();
+  const idx = accounts.findIndex(a => a.username.toLowerCase() === acc.username.toLowerCase());
+  if (idx >= 0) { accounts[idx].lastLogin = acc.lastLogin; saveAccounts(accounts); }
+  currentUser = acc.username;
+  setSession(acc.username);
+  return { ok: true, username: acc.username };
+}
+
+function signOut() {
+  clearSession();
+  currentUser = null;
+}
+
+/* =========================================================================
+   USER-NAMESPACED STORAGE
+   ========================================================================= */
+const STORE_KEY = LEGACY_STORE;
+const DAILY_KEY = LEGACY_DAILY;
+
+function userStoreKey(base) {
+  return currentUser ? (base + '_' + currentUser) : (base + '_guest');
+}
+function loadScores() {
+  try { return JSON.parse(localStorage.getItem(userStoreKey(STORE_KEY))) || {}; }
+  catch (e) { return {}; }
+}
+function saveScores(s) {
+  try { localStorage.setItem(userStoreKey(STORE_KEY), JSON.stringify(s)); } catch (e) {}
+}
+function getBest(idx) { return loadScores()[idx] || null; }
+function setBest(idx, data) {
+  const s = loadScores(); const cur = s[idx];
+  if (!cur || data.score > cur.score) { s[idx] = data; saveScores(s); }
+}
+function totalScore() { const s = loadScores(); let t = 0; for (const k in s) t += s[k].score || 0; return t; }
+function totalStars() { const s = loadScores(); let t = 0; for (const k in s) t += s[k].stars || 0; return t; }
+
+function loadDaily() {
+  try { return JSON.parse(localStorage.getItem(userStoreKey(DAILY_KEY))) || {}; }
+  catch (e) { return {}; }
+}
+function saveDaily(d) {
+  try { localStorage.setItem(userStoreKey(DAILY_KEY), JSON.stringify(d)); } catch (e) {}
+}
+function todayKey() {
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+function dailySeed() {
+  const d = new Date();
+  return (d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate()) ^ 0x5f3759df;
 }
 
 /* ---------- TEXTURE HELPERS ---------- */
@@ -812,7 +1067,7 @@ let playing = false;
 let transitioning = false;
 let uiOpen = false;
 let revealing = false;
-let loadingLevel = false;   // NEW: blocks all triggers during transitions
+let loadingLevel = false;
 let currentTarget = null;
 let magnifyHeld = false;
 let plateCheckers = [];
@@ -829,42 +1084,15 @@ const player = {
   vel: new THREE.Vector3(),
   yaw: 0, pitch: 0,
   eye: 1.66, radius: 0.34,
-  height: 1.9,             // NEW: for Y-aware collision
+  height: 1.9,
   walk: 3.3, run: 5.7,
   bob: 0
 };
 
 const progress = {
-  startTime: 0,
-  mistakes: 0,
-  solved: false,
-  revealed: false,
-  locks: [],
-  isDaily: false
+  startTime: 0, mistakes: 0, solved: false, revealed: false,
+  locks: [], isDaily: false
 };
-
-/* ---------- STORAGE ---------- */
-const STORE_KEY = 'escape100_prison_v3';
-const DAILY_KEY = 'escape100_prison_daily_v3';
-function loadScores() { try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; } catch (e) { return {}; } }
-function saveScores(s) { try { localStorage.setItem(STORE_KEY, JSON.stringify(s)); } catch (e) {} }
-function getBest(idx) { return loadScores()[idx] || null; }
-function setBest(idx, data) {
-  const s = loadScores(); const cur = s[idx];
-  if (!cur || data.score > cur.score) { s[idx] = data; saveScores(s); }
-}
-function totalScore() { const s = loadScores(); let t = 0; for (const k in s) t += s[k].score || 0; return t; }
-function totalStars() { const s = loadScores(); let t = 0; for (const k in s) t += s[k].stars || 0; return t; }
-function loadDaily() { try { return JSON.parse(localStorage.getItem(DAILY_KEY)) || {}; } catch (e) { return {}; } }
-function saveDaily(d) { try { localStorage.setItem(DAILY_KEY, JSON.stringify(d)); } catch (e) {} }
-function todayKey() {
-  const d = new Date();
-  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
-}
-function dailySeed() {
-  const d = new Date();
-  return (d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate()) ^ 0x5f3759df;
-}
 
 /* ---------- SCENE ---------- */
 function newScene() {
@@ -936,7 +1164,7 @@ function createRoom(spec) {
   const segW = hw + t - doorW / 2;
   wallBox(segW, h, t, (-hw - t - doorW / 2) / 2, h / 2, zN);
   wallBox(segW, h, t, ( doorW / 2 + hw + t) / 2, h / 2, zN);
-  wallBox(doorW, h - doorH, t, 0, (doorH + h) / 2, zN);   // <-- roof above door: y range [doorH, h]
+  wallBox(doorW, h - doorH, t, 0, (doorH + h) / 2, zN);
   wallBox(w + 2 * t, h, t, 0, h / 2, hd + t / 2);
   wallBox(t, h, d + 2 * t, hw + t / 2, h / 2, 0);
   wallBox(t, h, d + 2 * t, -hw - t / 2, h / 2, 0);
@@ -1051,7 +1279,6 @@ function addJailDecor(rng, spec) {
   const hw = w / 2, hd = d / 2;
   const placed = [];
 
-  // Vertical bars along one wall
   const barSide = rng() > 0.5 ? -1 : 1;
   const barZ = barSide === -1 ? -hd + 0.24 : hd - 0.24;
   const barMinX = -hw + 2.4, barMaxX = hw - 2.4;
@@ -1070,7 +1297,6 @@ function addJailDecor(rng, spec) {
     hBar.castShadow = true; scene.add(hBar);
   }
 
-  // Hanging chains
   const chainCount = RI(rng, 3, 6);
   for (let i = 0; i < chainCount; i++) {
     const cx = R(rng, -hw + 1.2, hw - 1.2);
@@ -1087,7 +1313,6 @@ function addJailDecor(rng, spec) {
     hook.rotation.x = Math.PI / 2; scene.add(hook);
   }
 
-  // Toilet + sink
   if (rng() > 0.35) {
     const cx = (rng() > 0.5 ? 1 : -1) * (hw - 0.75);
     const cz = (rng() > 0.5 ? 1 : -1) * (hd - 0.75);
@@ -1104,7 +1329,6 @@ function addJailDecor(rng, spec) {
     addCollider(sink);
   }
 
-  // Bunk
   if (rng() > 0.4) {
     const bx = (rng() > 0.5 ? 1 : -1) * (hw - 1.1);
     const bz = R(rng, -hd + 1.5, hd - 1.5);
@@ -1128,7 +1352,6 @@ function addJailDecor(rng, spec) {
     }
   }
 
-  // Pipes on ceiling
   const pipeDir = rng() > 0.5;
   for (let i = 0; i < 3; i++) {
     const pipe = new THREE.Mesh(
@@ -1142,7 +1365,6 @@ function addJailDecor(rng, spec) {
     scene.add(pipe);
   }
 
-  // Emergency wall light
   const emX = (rng() > 0.5 ? 1 : -1) * (hw - 0.2);
   const emZ = R(rng, -hd + 2, hd - 2);
   const emMat = new THREE.MeshStandardMaterial({
@@ -1953,17 +2175,14 @@ function generateLevelSpec(index, isDaily) {
   const rng = mulberry32(seed);
   const tier = isDaily ? 9 : Math.floor((index - 1) / 10);
   const diff = Math.min(10, tier + 1);
-
   let numLocks = 1;
   if (tier >= 6) numLocks = 3;
   else if (tier >= 3) numLocks = 2;
-
   const mechKeys = SHUFFLE(rng, MECH_KEYS).slice(0, numLocks);
   const theme = THEMES[(index * 7 + 3) % THEMES.length];
   const w = isDaily ? 16 : 10 + ((index * 3) % 4) * 2;
   const d = isDaily ? 16 : 10 + ((index * 5) % 4) * 2;
   const h = isDaily ? 4.2 : 3.2 + ((index * 7) % 3) * 0.3;
-
   return { index, isDaily, rng, mechKeys, diff, tier, theme, w, d, h, seed };
 }
 
@@ -1999,7 +2218,6 @@ function makeContext(spec, roomInfo, lockIndex) {
     solve() { const lock = progress.locks[0]; if (lock) lock.satisfied = true; onLockSolved(0); },
     mistake() { progress.mistakes++; },
     toast(msg) { toast(msg); },
-
     floorSpot() {
       for (let i = 0; i < 50; i++) {
         const x = R(rng, -hw + 0.9, hw - 0.9);
@@ -2342,12 +2560,10 @@ function updateTension() {
 function revealLevel() {
   if (revealing || loadingLevel || !playing || transitioning || uiOpen) return;
   if (progress.solved) { toast('Already solved — walk through the door!'); return; }
-  revealing = true;
-  uiOpen = true;
+  revealing = true; uiOpen = true;
   document.exitPointerLock();
   pauseEl.classList.add('hidden');
-  fadeEl.classList.add('slow');
-  fadeEl.classList.add('show');
+  fadeEl.classList.add('slow'); fadeEl.classList.add('show');
   toast('⏭ Revealing the solution...', 'alarm');
 
   setTimeout(() => {
@@ -2364,7 +2580,6 @@ function revealLevel() {
     player.pos.set(0, 0, doorObj ? doorObj.hd - 3.5 : 2);
     fadeEl.classList.remove('show');
     startEscapeSequence();
-
     let tries = 0;
     const waitForOpen = setInterval(() => {
       tries++;
@@ -2410,7 +2625,6 @@ function computeScore(elapsed, mistakes) {
 function completeLevel() {
   if (transitioning) return;
   transitioning = true;
-
   const elapsed = (performance.now() - progress.startTime) / 1000;
   let score, stars;
   if (progress.revealed) { score = 0; stars = 1; }
@@ -2491,58 +2705,45 @@ function tryInteract() {
   if (currentTarget && currentTarget.active) currentTarget.action();
 }
 
-/* =========================================================================
-   MOVEMENT  —  FIX #1: Y-aware collision
-   ========================================================================= */
+/* ---------- MOVEMENT ---------- */
 function collides(x, z) {
   const r = player.radius;
   const pyMin = player.pos.y;
   const pyMax = player.pos.y + player.height;
   for (let i = 0; i < colliders.length; i++) {
     const c = colliders[i];
-    // skip things entirely below the player's shins
     if (c.max.y < pyMin + 0.28) continue;
-    // skip things entirely above the player's head (this is what was blocking the doorway!)
     if (c.min.y > pyMax) continue;
     if (x + r > c.min.x && x - r < c.max.x && z + r > c.min.z && z - r < c.max.z) return true;
   }
   return false;
 }
-
 let touchMoveX = 0, touchMoveZ = 0, runningTouch = false;
-
 function updateMovement(dt) {
   const sinY = Math.sin(player.yaw), cosY = Math.cos(player.yaw);
   const fwdX = -sinY, fwdZ = -cosY;
   const rgtX = cosY, rgtZ = -sinY;
-
   let mx = 0, mz = 0;
   if (keysDown['KeyW'] || keysDown['ArrowUp']) { mx += fwdX; mz += fwdZ; }
   if (keysDown['KeyS'] || keysDown['ArrowDown']) { mx -= fwdX; mz -= fwdZ; }
   if (keysDown['KeyD'] || keysDown['ArrowRight']) { mx += rgtX; mz += rgtZ; }
   if (keysDown['KeyA'] || keysDown['ArrowLeft']) { mx -= rgtX; mz -= rgtZ; }
   if (touchMoveX || touchMoveZ) { mx += fwdX * -touchMoveZ + rgtX * touchMoveX; mz += fwdZ * -touchMoveZ + rgtZ * touchMoveX; }
-
   const len = Math.hypot(mx, mz);
   if (len > 0) { mx /= len; mz /= len; }
-
   const running = keysDown['ShiftLeft'] || keysDown['ShiftRight'] || runningTouch;
   const spd = running ? player.run : player.walk;
-
   const tx = mx * spd, tz = mz * spd;
   const acc = Math.min(1, dt * 24);
   player.vel.x += (tx - player.vel.x) * acc;
   player.vel.z += (tz - player.vel.z) * acc;
-
   const dx = player.vel.x * dt, dz = player.vel.z * dt;
   if (!collides(player.pos.x + dx, player.pos.z)) player.pos.x += dx; else player.vel.x = 0;
   if (!collides(player.pos.x, player.pos.z + dz)) player.pos.z += dz; else player.vel.z = 0;
-
   const speed = Math.hypot(player.vel.x, player.vel.z);
   if (speed > 0.4) player.bob += dt * speed * 2.0;
   const bobY = Math.sin(player.bob * 2) * 0.015 * Math.min(1, speed / 3);
   const bobX = Math.cos(player.bob) * 0.009 * Math.min(1, speed / 3);
-
   camera.position.set(
     player.pos.x + bobX * Math.cos(player.yaw),
     player.pos.y + player.eye + bobY,
@@ -2550,12 +2751,11 @@ function updateMovement(dt) {
   );
   camera.rotation.y = player.yaw;
   camera.rotation.x = player.pitch;
-
   for (let i = 0; i < plateCheckers.length; i++) plateCheckers[i].check(player.pos.x, player.pos.z);
   checkWalkthrough();
 }
 
-/* ---------- UI WIRING ---------- */
+/* ---------- UI ELEMENTS ---------- */
 const promptEl = document.getElementById('prompt');
 const toastEl = document.getElementById('toast');
 const fadeEl = document.getElementById('fade');
@@ -2564,6 +2764,7 @@ const levelNumEl = document.getElementById('level-num');
 const levelNameEl = document.getElementById('level-name');
 const crosshair = document.getElementById('crosshair');
 const menuEl = document.getElementById('menu');
+const authEl = document.getElementById('auth');
 const pauseEl = document.getElementById('pause');
 const completeEl = document.getElementById('complete');
 const noteOverlay = document.getElementById('note-overlay');
@@ -2660,9 +2861,9 @@ function flashKeypadError() {
 }
 document.getElementById('keypad-close').onclick = closeKeypad;
 
-document.querySelectorAll('.tab').forEach(t => {
+document.querySelectorAll('.tab[data-tab]').forEach(t => {
   t.onclick = () => {
-    document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.tab[data-tab]').forEach(x => x.classList.remove('active'));
     t.classList.add('active');
     document.getElementById('tab-levels').style.display = t.dataset.tab === 'levels' ? '' : 'none';
     document.getElementById('tab-daily').style.display = t.dataset.tab === 'daily' ? '' : 'none';
@@ -2694,6 +2895,8 @@ function buildLevelGrid() {
 function refreshMenuStats() {
   document.getElementById('total-score').textContent = totalScore();
   document.getElementById('total-stars').textContent = totalStars();
+  const un = document.getElementById('user-name');
+  if (un) un.textContent = currentUser || 'Guest';
 }
 function refreshDailyStatus() {
   const d = loadDaily(); const tk = todayKey();
@@ -2705,8 +2908,9 @@ function refreshDailyStatus() {
 
 document.getElementById('daily-play').onclick = () => { menuEl.classList.add('hidden'); startLevel(0, true); };
 document.getElementById('reset-btn').onclick = () => {
-  if (confirm('Reset all progress and scores?')) {
-    localStorage.removeItem(STORE_KEY); localStorage.removeItem(DAILY_KEY);
+  if (confirm('Reset all progress and scores for ' + (currentUser || 'Guest') + '?')) {
+    localStorage.removeItem(userStoreKey(STORE_KEY));
+    localStorage.removeItem(userStoreKey(DAILY_KEY));
     buildLevelGrid(); refreshMenuStats(); refreshDailyStatus();
   }
 };
@@ -2731,48 +2935,108 @@ function showMenu() {
   document.exitPointerLock();
   if (scene) disposeScene();
   newScene();
+  authEl.classList.add('hidden');
   menuEl.classList.remove('hidden');
   buildLevelGrid(); refreshMenuStats(); refreshDailyStatus();
 }
 
-/* =========================================================================
-   START LEVEL  —  FIX #2: block triggers during the fade transition
-   ========================================================================= */
 function startLevel(index, isDaily) {
   menuEl.classList.add('hidden'); completeEl.classList.add('hidden'); pauseEl.classList.add('hidden');
   noteOverlay.classList.add('hidden'); keypadOverlay.classList.add('hidden');
-
-  // Block EVERYTHING during the fade to prevent the old level's walkthrough
-  // trigger from firing against the old door while the new level loads.
-  playing = false;
-  uiOpen = true;
-  transitioning = true;
-  revealing = false;
-  loadingLevel = true;
-
+  playing = false; uiOpen = true; transitioning = true; revealing = false; loadingLevel = true;
   fadeEl.classList.add('show');
-
   setTimeout(() => {
-    try {
-      loadLevel(index, isDaily);
-    } catch (e) {
+    try { loadLevel(index, isDaily); }
+    catch (e) {
       console.error('loadLevel failed:', e);
       toast('Level failed to load — returning to menu', 'alarm');
       setTimeout(() => { loadingLevel = false; showMenu(); }, 1200);
       return;
     }
     fadeEl.classList.remove('show');
-    // Now that the new scene is built and the player is repositioned,
-    // it's safe to re-enable input.
-    playing = true;
-    uiOpen = false;
-    transitioning = false;
-    loadingLevel = false;
+    playing = true; uiOpen = false; transitioning = false; loadingLevel = false;
   }, 80);
-
   if (isTouch) enableTouchControls(true);
   else canvas.requestPointerLock();
 }
+
+/* =========================================================================
+   AUTH UI
+   ========================================================================= */
+const signinErrorEl = document.getElementById('signin-error');
+const signupErrorEl = document.getElementById('signup-error');
+const signinUserEl = document.getElementById('signin-user');
+const signinPassEl = document.getElementById('signin-pass');
+const signupUserEl = document.getElementById('signup-user');
+const signupPassEl = document.getElementById('signup-pass');
+const signupPass2El = document.getElementById('signup-pass2');
+
+document.querySelectorAll('.tab[data-authtab]').forEach(t => {
+  t.onclick = () => {
+    document.querySelectorAll('.tab[data-authtab]').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById('auth-signin').style.display = t.dataset.authtab === 'signin' ? '' : 'none';
+    document.getElementById('auth-signup').style.display = t.dataset.authtab === 'signup' ? '' : 'none';
+    signinErrorEl.textContent = '';
+    signupErrorEl.textContent = '';
+  };
+});
+
+function showAuthError(el, msg) {
+  el.textContent = msg;
+  el.classList.remove('show');
+  void el.offsetWidth;
+  el.classList.add('show');
+}
+
+async function doSignIn() {
+  const u = signinUserEl.value.trim();
+  const p = signinPassEl.value;
+  signinErrorEl.textContent = '';
+  const btn = document.getElementById('signin-btn');
+  btn.disabled = true; btn.textContent = 'Signing in...';
+  const res = await loginAccount(u, p);
+  btn.disabled = false; btn.textContent = 'Sign In';
+  if (!res.ok) { showAuthError(signinErrorEl, res.error); return; }
+  signinPassEl.value = '';
+  toast('Welcome back, ' + res.username);
+  showMenu();
+}
+
+async function doSignUp() {
+  const u = signupUserEl.value.trim();
+  const p = signupPassEl.value;
+  const p2 = signupPass2El.value;
+  signupErrorEl.textContent = '';
+  if (p !== p2) { showAuthError(signupErrorEl, 'Access codes do not match.'); return; }
+  const btn = document.getElementById('signup-btn');
+  btn.disabled = true; btn.textContent = 'Creating...';
+  const res = await registerAccount(u, p);
+  btn.disabled = false; btn.textContent = 'Create Account';
+  if (!res.ok) { showAuthError(signupErrorEl, res.error); return; }
+  signupUserEl.value = ''; signupPassEl.value = ''; signupPass2El.value = '';
+  toast('Account created — welcome, ' + res.username);
+  showMenu();
+}
+
+document.getElementById('signin-btn').onclick = doSignIn;
+document.getElementById('signup-btn').onclick = doSignUp;
+signinPassEl.addEventListener('keydown', e => { if (e.key === 'Enter') doSignIn(); });
+signinUserEl.addEventListener('keydown', e => { if (e.key === 'Enter') signinPassEl.focus(); });
+signupPass2El.addEventListener('keydown', e => { if (e.key === 'Enter') doSignUp(); });
+signupUserEl.addEventListener('keydown', e => { if (e.key === 'Enter') signupPassEl.focus(); });
+signupPassEl.addEventListener('keydown', e => { if (e.key === 'Enter') signupPass2El.focus(); });
+
+document.getElementById('signout-btn').onclick = () => {
+  if (!confirm('Sign out of ' + (currentUser || 'this account') + '?\nYour progress is saved.')) return;
+  signOut();
+  menuEl.classList.add('hidden');
+  authEl.classList.remove('hidden');
+  signinUserEl.value = '';
+  signinPassEl.value = '';
+  signinUserEl.focus();
+  toast('Signed out');
+};
 
 /* ---------- INPUT ---------- */
 window.addEventListener('keydown', e => {
@@ -2789,9 +3053,7 @@ window.addEventListener('keydown', e => {
       if (!noteOverlay.classList.contains('hidden')) closeNote();
       if (!keypadOverlay.classList.contains('hidden')) closeKeypad();
       setTimeout(() => revealLevel(), 120);
-    } else {
-      revealLevel();
-    }
+    } else revealLevel();
   }
   if (e.code === 'Escape' && playing && !uiOpen && !transitioning) {
     uiOpen = true;
@@ -2928,31 +3190,30 @@ function animate() {
     camera.rotation.y = player.yaw;
     camera.rotation.x = player.pitch;
   }
-
   if (doorObj) doorObj.group.rotation.y += (doorObj.target - doorObj.group.rotation.y) * Math.min(1, dt * 5.5);
-
   updateEscapeSequence();
   updateFades();
   for (let i = 0; i < updaters.length; i++) updaters[i](dt, t);
-
   updateTimerHUD();
   updateTension();
   if (playing && !uiOpen && !loadingLevel) updateInteraction();
-
   renderer.render(scene, camera);
 }
 
-/* ---------- LIVE MENU CLOCK (CCTV) ---------- */
-function tickCCTV() {
+/* ---------- LIVE CLOCKS ---------- */
+function tickClocks() {
   const d = new Date();
   const hh = String(d.getHours()).padStart(2, '0');
   const mm = String(d.getMinutes()).padStart(2, '0');
   const ss = String(d.getSeconds()).padStart(2, '0');
-  const el = document.getElementById('cctv-clock');
-  if (el) el.textContent = hh + ':' + mm + ':' + ss;
+  const txt = hh + ':' + mm + ':' + ss;
+  const a = document.getElementById('cctv-clock');
+  const b = document.getElementById('auth-cctv-clock');
+  if (a) a.textContent = txt;
+  if (b) b.textContent = txt;
 }
-setInterval(tickCCTV, 1000);
-tickCCTV();
+setInterval(tickClocks, 1000);
+tickClocks();
 
 /* ---------- BOOT ---------- */
 buildAssets();
@@ -2963,13 +3224,26 @@ newScene();
   if (el) el.textContent = n;
 })();
 buildLevelGrid();
-refreshMenuStats();
-refreshDailyStatus();
 enableTouchControls(isTouch);
 if (isTouch) {
   document.getElementById('magnify-hint').textContent = 'Hold 🔍 to magnify';
   document.getElementById('magnify-hint').style.opacity = '0';
 }
+
+/* Restore session if a valid account exists */
+(function bootSession() {
+  const sess = getSession();
+  if (sess && findAccount(sess)) {
+    currentUser = sess;
+    showMenu();
+  } else {
+    clearSession();
+    authEl.classList.remove('hidden');
+    menuEl.classList.add('hidden');
+    signinUserEl.focus();
+  }
+})();
+
 animate();
 </script>
 </body>
