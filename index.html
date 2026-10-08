@@ -21,11 +21,6 @@ canvas{width:min(100vw,177.7vh);aspect-ratio:16/9;display:block;box-shadow:0 0 6
 const cv=document.getElementById('c'),g=cv.getContext('2d'),W=960,H=544,T=32;cv.width=W;cv.height=H;
 const MAXLV=120;
 const GAME_TITLE_A='ADVENTURE',GAME_TITLE_B='OF A LIFETIME';
-
-/* ============================================================
-   LIVE SYNC — your personal jsonblob is pre-filled below.
-   Free plan keeps the blob alive 3 days after last access.
-   ============================================================ */
 const SYNC_URL='https://jsonblob.com/api/jsonBlob/01a11a1b-ace1-7209-8667-dd766bd258a0';
 
 /* ===== BIOMES ===== */
@@ -75,6 +70,9 @@ return t;
 const THEME_NAMES=[];for(let i=0;i<MAXLV;i++)THEME_NAMES.push(themeFor(i).n);
 const LAYOUT_NAMES=['Rolling Hills','Sky Islands','Staircase Towers','Broken Bridges','Deep Descent','Crystal Caves'];
 
+/* ==== LAYOUT SELECTOR — every 6-level block uses all 6 layouts in rotation ==== */
+function layoutFor(n){ return (n*5 + 2*Math.floor(n/6)) % 6; }
+
 /* ===== STORAGE ===== */
 let profiles={};try{const p=JSON.parse(localStorage.getItem('sq_profiles')||'{}');if(p&&typeof p==='object'&&!Array.isArray(p))profiles=p;}catch(e){}
 let scores=[];try{const s=JSON.parse(localStorage.getItem('sq_scores')||'[]');if(Array.isArray(s))scores=s;}catch(e){}
@@ -87,39 +85,24 @@ function loadProfile(name){const p=profiles[name];if(!p)return false;
 save={bank:p.bank|0,unl:Math.max(0,Math.min(MAXLV-1,p.unl|0)),up:[0,0,0,0,0,0,0,0].map((v,i)=>(p.up&&p.up[i]|0)||0),skin:p.skin|0,name:name};return true;}
 
 /* ===== CLOUD SYNC ===== */
-let cloudStatus='off';
-let cloudBusy=false,cloudTimer=0;
-async function cloudPull(){
-  if(!SYNC_URL)return null;
-  try{const r=await fetch(SYNC_URL,{cache:'no-store'});if(!r.ok){cloudStatus='err';return null}const d=await r.json();cloudStatus='ok';return d;}
-  catch(e){cloudStatus='err';return null}
-}
-async function cloudPush(data){
-  if(!SYNC_URL)return false;
-  try{const r=await fetch(SYNC_URL,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});if(!r.ok){cloudStatus='err';return false}cloudStatus='ok';return true;}
-  catch(e){cloudStatus='err';return false}
-}
+let cloudStatus='off',cloudBusy=false,cloudTimer=0;
+async function cloudPull(){if(!SYNC_URL)return null;try{const r=await fetch(SYNC_URL,{cache:'no-store'});if(!r.ok){cloudStatus='err';return null}const d=await r.json();cloudStatus='ok';return d;}catch(e){cloudStatus='err';return null}}
+async function cloudPush(data){if(!SYNC_URL)return false;try{const r=await fetch(SYNC_URL,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});if(!r.ok){cloudStatus='err';return false}cloudStatus='ok';return true;}catch(e){cloudStatus='err';return false}}
 async function cloudMerge(){
-  if(!SYNC_URL||cloudBusy)return false;
-  cloudBusy=true;
-  try{
-    const d=await cloudPull();
-    if(!d){cloudBusy=false;return false}
-    if(d.profiles){for(const k in d.profiles){const rp=d.profiles[k],lp=profiles[k];if(!lp||(rp.updated||0)>(lp.updated||0))profiles[k]=rp;}}
-    if(Array.isArray(d.scores)){for(const rs of d.scores){if(!rs||!rs.name)continue;const i=scores.findIndex(s=>s.name===rs.name);if(i<0)scores.push(rs);else if((rs.time||0)>(scores[i].time||0))scores[i]=rs;}}
-    scores.sort((a,b)=>b.score-a.score);scores=scores.slice(0,20);
-    svProfiles();saveScores();
-    await cloudPush({profiles,scores});
-    cloudBusy=false;return true;
-  }catch(e){cloudBusy=false;cloudStatus='err';return false}
+if(!SYNC_URL||cloudBusy)return false;cloudBusy=true;
+try{
+const d=await cloudPull();if(!d){cloudBusy=false;return false}
+if(d.profiles){for(const k in d.profiles){const rp=d.profiles[k],lp=profiles[k];if(!lp||(rp.updated||0)>(lp.updated||0))profiles[k]=rp;}}
+if(Array.isArray(d.scores)){for(const rs of d.scores){if(!rs||!rs.name)continue;const i=scores.findIndex(s=>s.name===rs.name);if(i<0)scores.push(rs);else if((rs.time||0)>(scores[i].time||0))scores[i]=rs;}}
+scores.sort((a,b)=>b.score-a.score);scores=scores.slice(0,20);svProfiles();saveScores();
+await cloudPush({profiles,scores});cloudBusy=false;return true;
+}catch(e){cloudBusy=false;cloudStatus='err';return false}
 }
 function cloudPushSoon(){if(!SYNC_URL)return;clearTimeout(cloudTimer);cloudTimer=setTimeout(async()=>{await cloudMerge();},400);}
 setInterval(()=>{if(state==='title'&&(scr==='scores'||scr==='cover'||scr==='main'))cloudMerge();},20000);
-function cloudDot(){
-  if(!SYNC_URL){g.beginPath();g.arc(20,20,6,0,7);g.fillStyle='#888';g.fill();g.strokeStyle='#0008';g.lineWidth=1.5;g.stroke();return}
-  const c=cloudStatus==='ok'?'#4caf50':cloudStatus==='err'?'#f44336':'#ffc107';
-  g.beginPath();g.arc(20,20,6,0,7);g.fillStyle=c;g.fill();g.strokeStyle='#0008';g.lineWidth=1.5;g.stroke();
-}
+function cloudDot(){if(!SYNC_URL){g.beginPath();g.arc(20,20,6,0,7);g.fillStyle='#888';g.fill();g.strokeStyle='#0008';g.lineWidth=1.5;g.stroke();return}
+const c=cloudStatus==='ok'?'#4caf50':cloudStatus==='err'?'#f44336':'#ffc107';
+g.beginPath();g.arc(20,20,6,0,7);g.fillStyle=c;g.fill();g.strokeStyle='#0008';g.lineWidth=1.5;g.stroke();}
 addEventListener('beforeunload',()=>{storeProfile();saveScores();});
 
 /* ===== SHARE CODES ===== */
@@ -130,7 +113,7 @@ storeProfile();
 const payload=[save.name,score,lvl+1,Date.now(),save.bank,save.unl,save.skin,save.up.join(',')].join('|');
 let code;try{code=btoa(encodeURIComponent('A2|'+payload+'|'+chk(payload)))}catch(e){alert('Share failed.');return}
 let copied=false;try{if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(code);copied=true}}catch(e){}
-const msg='✅ CODE COPIED'+(copied?'':'')+'\n\n'+code+'\n\n'+(SYNC_URL?'(Auto-sync is on — this is a backup code only.)':'Send to your other device.');
+const msg='✅ CODE COPIED\n\n'+code+'\n\n'+(SYNC_URL?'(Auto-sync is on — this is a backup code only.)':'Send to your other device.');
 if(copied)alert(msg);else prompt('Copy this code:',code);
 }
 function importScore(){
@@ -199,18 +182,12 @@ if(e.key==' '){if(nameInput.length<12&&nameInput.length>0)nameInput+=' ';e.preve
 if(e.key.length==1&&nameInput.length<12)nameInput+=e.key;
 e.preventDefault();
 }
-async function submitName(){
-  const nm=nameInput.trim().slice(0,12);
-  if(!nm)return;
-  pendingName=nm;
-  if(SYNC_URL){await cloudMerge();}
-  scr='profile';sel=0;
-}
+async function submitName(){const nm=nameInput.trim().slice(0,12);if(!nm)return;pendingName=nm;if(SYNC_URL){await cloudMerge();}scr='profile';sel=0;}
 
 /* ===== AUDIO ===== */
 function snd(f,d=.1,t='square',v=.04,s=0){try{AC=AC||new AudioContext();const o=AC.createOscillator(),a=AC.createGain(),n=AC.currentTime;o.type=t;o.frequency.setValueAtTime(f,n);if(s)o.frequency.exponentialRampToValueAtTime(Math.max(30,f+s),n+d);a.gain.setValueAtTime(v,n);a.gain.exponentialRampToValueAtTime(.001,n+d);o.connect(a).connect(AC.destination);o.start();o.stop(n+d)}catch(e){}}
 
-/* ===== LEVEL GENERATION (FIXED) ===== */
+/* ===== LEVEL GENERATION (REBUILT) ===== */
 const rf=s=>()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
 
 function build(n){
@@ -220,7 +197,7 @@ function build(n){
   const d=n<14?n/14:Math.min(1.8,1+(n-14)/65);
   for(let y=0;y<17;y++) m.push(new Uint8Array(cols));
 
-  /* BOSS ARENA */
+  /* ----- BOSS ARENA ----- */
   if(bs){
     for(let a=0;a<cols;a++) for(let y=12;y<17;y++) m[y][a]=1;
     for(const [a,y,w] of [[3,9,4],[23,9,4],[13,7,5]]) for(let i=0;i<w;i++) m[y][a+i]=2;
@@ -230,167 +207,196 @@ function build(n){
     return {m,cols,E,C,th,n,bs,sp:{x:2*T,y:11*T-30}};
   }
 
-  const col=(a,h)=>{for(let y=h;y<17;y++) m[y][a]=1;};
-  const plat=(a,y,w)=>{for(let i=0;i<w;i++) m[y][a+i]=2;};
-  const coin=(a,y,k=1)=>{for(let i=0;i<k;i++) C.push({x:(a+i)*T+16,y:y*T+16});};
+  const col=(a,h)=>{h=Math.max(3,Math.min(15,h));for(let y=h;y<17;y++) m[y][a]=1;};
+  const plat=(a,y,w)=>{y=Math.max(2,Math.min(15,y));for(let i=0;i<w;i++) if(a+i<cols) m[y][a+i]=2;};
+  const coin=(a,y,k=1)=>{y=Math.max(2,Math.min(14,y));for(let i=0;i<k;i++) C.push({x:(a+i)*T+16,y:y*T+16});};
   const en=o=>E.push(o);
 
   const eTier=Math.min(6,Math.floor(n/3));
   const oTier=Math.min(6,Math.floor(n/3));
-  const layout=(n*3+Math.floor(n/9))%6;
+  const layout=layoutFor(n);
 
-  function spawn(x,gh){
-    const roll=R(),gy=gh;
-    if(roll<0.24){en({k:'w',x:x*T,y:gy*T-26,w:26,h:26,vx:R()<.5?-1:1,sp:.7+d*.8});}
-    else if(roll<0.42){en({k:'f',x0:x*T,y0:(gy-4)*T,x:0,y:0,w:28,h:20,t:R()*6});}
-    else if(eTier>=1&&roll<0.56){en({k:'j',x:x*T,y:gy*T-30,w:26,h:28,vx:R()<.5?-1:1,vy:0,on:1,jt:Math.floor(R()*60)});}
-    else if(eTier>=2&&roll<0.68){en({k:'sh',x:x*T,y:gy*T-30,w:26,h:30,t:Math.floor(R()*80),fireT:90-oTier*6});}
-    else if(eTier>=3&&roll<0.78){en({k:'ch',x:x*T,y:(gy-4)*T,w:24,h:24,vx:0,vy:0,sp:1+d*.5});}
-    else if(eTier>=4&&roll<0.88){en({k:'bm',x0:x*T,y0:(gy-6)*T,x:x*T,y:(gy-6)*T,w:30,h:30,t:Math.floor(R()*80),dir:R()<.5?1:-1});}
-    else if(eTier>=5){en({k:'el',x0:x*T,y0:(gy-4)*T,x:x*T,y:(gy-4)*T,w:22,h:22,t:R()*6});}
-    else if(roll<0.5){en({k:'w',x:x*T,y:gy*T-26,w:26,h:26,vx:R()<.5?-1:1,sp:.7+d*.8});}
-    if(R()<0.05) en({k:'h',x:(x*T)+6,y:(gy-2)*T,w:20,h:20});
+  function spawn(sx,gh){
+    const roll=R();
+    const x=Math.max(1,Math.min(cols-3,Math.floor(sx)));
+    if(roll<0.24){en({k:'w',x:x*T,y:gh*T-26,w:26,h:26,vx:R()<.5?-1:1,sp:.7+d*.8});}
+    else if(roll<0.42){en({k:'f',x0:x*T,y0:(gh-4)*T,x:0,y:0,w:28,h:20,t:R()*6});}
+    else if(eTier>=1&&roll<0.56){en({k:'j',x:x*T,y:gh*T-30,w:26,h:28,vx:R()<.5?-1:1,vy:0,on:1,jt:Math.floor(R()*60)});}
+    else if(eTier>=2&&roll<0.68){en({k:'sh',x:x*T,y:gh*T-30,w:26,h:30,t:Math.floor(R()*80),fireT:90-oTier*6});}
+    else if(eTier>=3&&roll<0.78){en({k:'ch',x:x*T,y:(gh-4)*T,w:24,h:24,vx:0,vy:0,sp:1+d*.5});}
+    else if(eTier>=4&&roll<0.88){en({k:'bm',x0:x*T,y0:(gh-6)*T,x:x*T,y:(gh-6)*T,w:30,h:30,t:Math.floor(R()*80),dir:R()<.5?1:-1});}
+    else if(eTier>=5){en({k:'el',x0:x*T,y0:(gh-4)*T,x:x*T,y:(gh-4)*T,w:22,h:22,t:R()*6});}
+    else if(roll<0.5){en({k:'w',x:x*T,y:gh*T-26,w:26,h:26,vx:R()<.5?-1:1,sp:.7+d*.8});}
+    if(R()<0.05) en({k:'h',x:x*T+6,y:(gh-2)*T,w:20,h:20});
   }
-  function maybePlatform(sx,sy){
-    if(n<2||R()>0.18) return;
+  function maybePlatform(sx,gh){
+    if(n<2||R()>0.15) return;
+    const py=gh-3; if(py<3) return;   /* leave 3 tiles of headroom */
+    const x=Math.max(1,Math.min(cols-4,Math.floor(sx)));
     const kind=R();
-    // Place platforms a few tiles above ground, so oscillation never sinks into terrain
-    if(kind<0.4){
-      en({k:'m',x:sx*T,y:sy*T-8,x0:sx*T,y0:sy*T-8,ax:0,ay:0,w:80,h:12,t:R()*6,dx:0,dy:0,my:40+R()*40,dir:'v'});
-    } else if(kind<0.7){
-      en({k:'m',x:sx*T,y:sy*T-8,x0:sx*T,y0:sy*T-8,ax:80+R()*100,ay:0,w:80,h:12,t:R()*6,dx:0,dy:0,dir:'h'});
-    } else {
-      en({k:'m',x:sx*T,y:sy*T-8,x0:sx*T,y0:sy*T-8,ax:60+R()*60,ay:50+R()*50,w:80,h:12,t:R()*6,dx:0,dy:0,dir:'d'});
-    }
+    if(kind<0.4){ en({k:'m',x:x*T,y:py*T-8,x0:x*T,y0:py*T-8,ax:0,ay:0,w:80,h:12,t:R()*6,dx:0,dy:0,my:20+R()*30,dir:'v'}); }
+    else if(kind<0.7){ en({k:'m',x:x*T,y:py*T-8,x0:x*T,y0:py*T-8,ax:60+R()*80,ay:0,w:80,h:12,t:R()*6,dx:0,dy:0,dir:'h'}); }
+    else { en({k:'m',x:x*T,y:py*T-8,x0:x*T,y0:py*T-8,ax:50+R()*50,ay:30+R()*40,w:80,h:12,t:R()*6,dx:0,dy:0,dir:'d'}); }
   }
-  function spikeRun(x0,y,len){if(oTier>=0) for(let i=0;i<len;i++) m[y][x0+i]=3;}
-  function lavaPool(x0,y,len){if(oTier>=3) for(let i=0;i<len;i++) m[y][x0+i]=4;else if(oTier>=0) for(let i=0;i<len;i++) m[y][x0+i]=3;}
-  function electricPad(x0,y,len){if(oTier>=5) for(let i=0;i<len;i++) m[y][x0+i]=5;else if(oTier>=0) for(let i=0;i<len;i++) m[y][x0+i]=3;}
+  const spikeRun=(x0,y,len)=>{y=Math.max(2,Math.min(15,y));for(let i=0;i<len;i++) if(x0+i<cols) m[y][x0+i]=3;};
+  const lavaPool=(x0,y,len)=>{y=Math.max(2,Math.min(16,y));const v=(oTier>=3)?4:3;for(let i=0;i<len;i++) if(x0+i<cols) m[y][x0+i]=v;};
+  const electricPad=(x0,y,len)=>{y=Math.max(2,Math.min(15,y));const v=(oTier>=5)?5:3;for(let i=0;i<len;i++) if(x0+i<cols) m[y][x0+i]=v;};
 
   let x=0,gh=12;
   for(;x<8;x++) col(x,gh);
   let lc=-1000;
-  /* Checkpoint helper: placed AFTER ground height is decided, so it always sits exactly on the ground */
-  const tryCP=(s,cgh)=>{if(s-lc>26){lc=s;en({k:'c',x:s*T+6,y:(cgh-2)*T,w:20,h:64});}};
+  /* checkpoint placed AFTER ground is decided — always sits on the ground */
+  const tryCP=(s,cgh)=>{if(s-lc>24 && s>=1 && s<cols-2){lc=s;en({k:'c',x:s*T+6,y:(cgh-2)*T,w:20,h:64});}};
 
-  /* ===== LAYOUT 0 — ROLLING HILLS ===== */
+  /* ============================================================
+     LAYOUT 0 — Rolling Hills  (smooth undulation, wide safe paths)
+     ============================================================ */
   if(layout===0){
     while(x<cols-14){
-      if(x-lc>28){lc=x;en({k:'c',x:x*T+6,y:(gh-2)*T,w:20,h:64});for(let i=0;i<3;i++)col(x++,gh);continue;}
+      if(x-lc>26){lc=x;en({k:'c',x:x*T+6,y:(gh-2)*T,w:20,h:64});for(let i=0;i<3;i++)col(x++,gh);continue;}
       const r=R();
-      if(r<.26){const l=3+R()*5|0,s=x;for(let i=0;i<l;i++)col(x++,gh);coin(s+1,gh-1,l-2);if(R()<.5+d*.3)spawn(s+l/2,gh);}
-      else if(r<.5){const gw=Math.min(4,2+(R()*(2.5+d*1.5)|0));maybePlatform(x,gh-3);x+=gw;if(gw>=3&&R()<.5)plat(x-gw+((gw-2)>>1),gh-2,2);coin(x-gw,gh-3,gw);for(let i=0;i<3;i++)col(x++,gh);}
+      if(r<.26){const l=3+(R()*5|0),s=x;for(let i=0;i<l;i++)col(x++,gh);coin(s+1,gh-1,l-2);if(R()<.5+d*.3)spawn(s+l/2,gh);}
+      else if(r<.5){const gw=Math.min(4,2+(R()*(2.5+d*1.5)|0));maybePlatform(x,gh);x+=gw;if(gw>=3&&R()<.5)plat(x-gw+((gw-2)>>1),gh-2,2);coin(x-gw,gh-3,gw);for(let i=0;i<3;i++)col(x++,gh);}
       else if(r<.68){gh=Math.max(7,Math.min(14,gh+(R()<.5?-1:1)*(1+(R()*2|0))));for(let i=0;i<3+(R()*2|0);i++)col(x++,gh);}
       else if(r<.82){const s=x;for(let i=0;i<6;i++)col(x++,gh);spikeRun(s+2,gh-1,2);if(oTier>=3&&R()<.3)lavaPool(s+1,gh-1,1);coin(s+1,gh-3,4);}
-      else{const s=x,row=Math.max(2,gh-6);for(let i=0;i<7;i++)col(x++,gh);if(oTier>=1)en({k:'s',x:(s+1)*T+2,y:gh*T-14,w:28,h:14,a:0});plat(s+3,row,3);coin(s+3,row-1,3);if(R()<.5)spawn(s+4,row);}
+      else{const s=x,row=Math.max(3,gh-5);for(let i=0;i<7;i++)col(x++,gh);if(oTier>=1)en({k:'s',x:(s+1)*T+2,y:gh*T-14,w:28,h:14,a:0});plat(s+3,row,3);coin(s+3,row-1,3);if(R()<.5)spawn(s+4,row);}
     }
   }
-  /* ===== LAYOUT 1 — SKY ISLANDS ===== */
+  /* ============================================================
+     LAYOUT 1 — Sky Islands (short 2–3 tile gaps, small height change)
+     ============================================================ */
   else if(layout===1){
-    gh=12;for(;x<12;x++)col(x,gh);
+    gh=11; for(;x<12;x++) col(x,gh);
     while(x<cols-14){
-      const gap=3+(R()*3|0);
-      for(let i=0;i<gap;i++){if(R()<.3)coin(x,gh-1,1);if(oTier>=3&&R()<.3)m[16][x]=4;x++;}
+      const gap=2+(R()*2|0);                                  /* gap 2–3 tiles */
+      for(let i=0;i<gap;i++){ if(R()<.3) coin(x,gh-1,1); if(oTier>=3&&R()<.4) m[16][x]=4; x++; }
       const iw=4+(R()*4|0);
-      const ny=Math.max(5,Math.min(13,gh+(R()<.5?-1:1)*(1+(R()*3|0))));
+      const ny=Math.max(7,Math.min(13,gh+(R()<.5?-1:1)*(1+(R()*2|0))));  /* height change ±1–2 */
       const s=x;
-      for(let i=0;i<iw;i++)col(x++,ny);
-      coin(s,ny-1,iw);
-      tryCP(s,ny);                       /* checkpoint placed at ground height ny */
-      if(R()<.55+d*.3)spawn(s+iw/2,ny);
+      for(let i=0;i<iw;i++) col(x++,ny);
+      coin(s+1,ny-2,iw-2);
+      tryCP(s,ny);
+      if(R()<.55+d*.3) spawn(s+iw/2,ny);
       gh=ny;
-      if(R()<.4){const fw=3+(R()*3|0),fy=Math.max(2,ny-4-(R()*2|0));plat(s+1,fy,fw);coin(s+1,fy-1,fw);}
-      if(oTier>=1&&R()<.2){const s2=s+1;m[ny-1][s2]=3;}
+      if(R()<.35){ const fw=2+(R()*3|0),fy=Math.max(3,ny-4-(R()*2|0)); plat(s+2,fy,fw); coin(s+2,fy-1,fw); }
+      if(oTier>=1&&R()<.2) m[ny-1][s+2]=3;
     }
   }
-  /* ===== LAYOUT 2 — STAIRCASE TOWERS ===== */
+  /* ============================================================
+     LAYOUT 2 — Staircase Towers (gentle 1-tile steps, wider treads)
+     ============================================================ */
   else if(layout===2){
-    gh=13;for(;x<8;x++)col(x,gh);let dir=-1;
+    gh=12; for(;x<8;x++) col(x,gh);
+    let dir=-1;
     while(x<cols-14){
-      const step=1+(R()*2|0);
-      gh=Math.max(4,Math.min(14,gh+dir*step));
-      if(gh<=4)dir=1;if(gh>=14)dir=-1;
-      const l=4+(R()*3|0),s=x;
-      for(let i=0;i<l;i++)col(x++,gh);
-      coin(s+1,gh-2,l-1);
-      tryCP(s,gh);                       /* checkpoint matches this step's height */
-      if(R()<.55+d*.3)spawn(s+l/2,gh);
-      if(R()<.4){const fy=Math.max(2,gh-4);plat(s+1,fy,Math.max(2,l-2));}
-      if(oTier>=1&&R()<.25)m[gh-1][s+1]=3;
-      if(oTier>=5&&R()<.15)m[gh-1][s+l-2]=5;
+      gh += dir;                                            /* 1-tile step */
+      if(gh<=7) dir=1; if(gh>=14) dir=-1;
+      gh=Math.max(7,Math.min(14,gh));
+      const l=6+(R()*3|0);                                  /* 6–8 tile treads */
+      const s=x;
+      for(let i=0;i<l;i++) col(x++,gh);
+      if(l>4) coin(s+2,gh-2,l-4);
+      tryCP(s,gh);
+      if(R()<.5+d*.3) spawn(s+l/2,gh);
+      if(R()<.4){ const fy=Math.max(3,gh-3); plat(s+2,fy,Math.max(2,l-4)); }
+      if(oTier>=1&&R()<.22) m[gh-1][s+2]=3;
+      if(oTier>=5&&R()<.15) m[gh-1][s+l-3]=5;
     }
   }
-  /* ===== LAYOUT 3 — BROKEN BRIDGES ===== */
+  /* ============================================================
+     LAYOUT 3 — Broken Bridges (safe gap widths)
+     ============================================================ */
   else if(layout===3){
-    gh=12;for(;x<8;x++)col(x,gh);
+    gh=12; for(;x<8;x++) col(x,gh);
     while(x<cols-14){
       if(x-lc>24){lc=x;en({k:'c',x:x*T+6,y:(gh-2)*T,w:20,h:64});}
-      const len=5+(R()*5|0),s=x;
-      for(let i=0;i<len;i++)col(x++,gh);
-      coin(s+1,gh-3,len-2);
-      if(R()<.6)spawn(s+2,gh);
-      const gap=3+(R()*3|0);
-      for(let i=0;i<gap;i++){if(oTier>=3)lavaPool(x,16,1);if(R()<.3)coin(x,gh-2,1);x++;}
+      const len=5+(R()*5|0), s=x;
+      for(let i=0;i<len;i++) col(x++,gh);
+      coin(s+1,gh-3,Math.max(1,len-2));
+      if(R()<.6) spawn(s+2,gh);
+      const gap=2+(R()*2|0);                                /* 2–3 tile gap */
+      for(let i=0;i<gap;i++){ if(oTier>=3) lavaPool(x,16,1); if(R()<.3) coin(x,gh-2,1); x++; }
       if(R()<.5){
-        const ny=Math.max(7,gh-(1+(R()*2|0)));
-        const seg=3+(R()*3|0),s2=x;
-        for(let i=0;i<seg;i++)col(x++,ny);
-        coin(s2,ny-2,1);
+        const ny=Math.max(7,gh-(1+(R()*2|0)));              /* drop 1–2 */
+        const seg=4+(R()*3|0), s2=x;
+        for(let i=0;i<seg;i++) col(x++,ny);
+        coin(s2+1,ny-2,Math.max(1,seg-2));
         tryCP(s2,ny);
         gh=ny;
       }
-      if(oTier>=1&&R()<.2)m[gh-1][x-1]=3;
+      if(oTier>=1&&R()<.2) m[gh-1][x-1]=3;
     }
   }
-  /* ===== LAYOUT 4 — DEEP DESCENT ===== */
+  /* ============================================================
+     LAYOUT 4 — Deep Descent (starts high, descends; small vertical steps)
+     ============================================================ */
   else if(layout===4){
-    gh=6;for(;x<8;x++)col(x,gh);
+    gh=6; for(;x<8;x++) col(x,gh);
     while(x<cols-14){
       const r=R();
       if(r<.5){
-        gh=Math.min(14,gh+1+(R()*2|0));
-        const l=4+(R()*3|0),s=x;
-        for(let i=0;i<l;i++)col(x++,gh);
-        coin(s,gh-2,l-1);
+        gh=Math.min(14,gh+1+(R()*2|0));                     /* descend 1–2 */
+        const l=4+(R()*3|0), s=x;
+        for(let i=0;i<l;i++) col(x++,gh);
+        coin(s+1,gh-2,Math.max(1,l-2));
         tryCP(s,gh);
-        if(R()<.5)spawn(s+2,gh);
+        if(R()<.5) spawn(s+2,gh);
       } else if(r<.75){
-        const ny=Math.max(4,gh-(1+(R()*2|0)));
-        const l=3+(R()*3|0),s=x;
-        for(let i=0;i<l;i++)col(x++,ny);
+        const ny=Math.max(7,gh-(1+(R()*2|0)));              /* rise 1–2 */
+        const l=4+(R()*3|0), s=x;
+        for(let i=0;i<l;i++) col(x++,ny);
         tryCP(s,ny);
         gh=ny;
       } else {
-        const gap=2+(R()*3|0);
-        for(let i=0;i<gap;i++){if(oTier>=0)m[14][x]=3;if(oTier>=3)lavaPool(x,15,1);x++;}
-        const l=3,s=x;
-        for(let i=0;i<l;i++)col(x++,gh);
+        const gap=2+(R()*2|0);
+        for(let i=0;i<gap;i++){ if(oTier>=0) m[14][x]=3; if(oTier>=3) lavaPool(x,15,1); x++; }
+        const l=4, s=x;
+        for(let i=0;i<l;i++) col(x++,gh);
         tryCP(s,gh);
       }
     }
   }
-  /* ===== LAYOUT 5 — CRYSTAL CAVES ===== */
+  /* ============================================================
+     LAYOUT 5 — Crystal Caves (ceiling + floor, floating platforms)
+     ============================================================ */
   else{
-    gh=12;for(;x<8;x++){col(x,gh);for(let y=0;y<3;y++)m[y][x]=1;}
+    gh=11; for(;x<8;x++){ col(x,gh); for(let y=0;y<3;y++) m[y][x]=1; }
     while(x<cols-14){
-      if(x-lc>30){lc=x;en({k:'c',x:x*T+6,y:(gh-2)*T,w:20,h:64});}
+      if(x-lc>26){lc=x;en({k:'c',x:x*T+6,y:(gh-2)*T,w:20,h:64});}
       const r=R();
-      if(r<.3){const h=2+(R()*3|0),s=x;for(let i=0;i<3;i++){for(let y=0;y<h;y++)m[y][x+i]=1;x++;}if(oTier>=1)m[h][s+1]=3;}
-      else if(r<.55){const h=2+(R()*3|0);for(let i=0;i<3;i++){for(let y=17-h;y<17;y++)m[y][x+i]=1;x++;}if(oTier>=1)m[16-h][x-2]=3;}
-      else if(r<.8){const gap=4+(R()*3|0),py=gh-2-(R()*2|0);for(let i=0;i<gap;i++)x++;plat(x-gap+1,py,Math.max(2,gap-2));coin(x-gap+1,py-1,Math.max(2,gap-2));if(R()<.4)spawn(x-gap/2,py);if(oTier>=5)for(let i=1;i<gap-1;i++)if(R()<.3)m[py+1][x-gap+i]=5;}
-      else{const l=4+(R()*3|0);for(let i=0;i<l;i++)col(x++,gh);coin(x-l+1,gh-2,l-2);if(R()<.6)spawn(x-l+2,gh);}
-      if(x<cols)for(let y=0;y<2;y++)m[y][x]=1;
+      if(r<.3){
+        const h=2+(R()*3|0), s=x;
+        for(let i=0;i<3;i++){ for(let y=0;y<h;y++) m[y][x+i]=1; x++; }
+        if(oTier>=1) m[h][s+1]=3;
+      } else if(r<.55){
+        const h=2+(R()*3|0);
+        for(let i=0;i<3;i++){ for(let y=17-h;y<17;y++) m[y][x+i]=1; x++; }
+        if(oTier>=1) m[16-h][x-2]=3;
+      } else if(r<.8){
+        const gap=3+(R()*3|0), py=Math.max(3,gh-2-(R()*2|0));
+        for(let i=0;i<gap;i++) x++;
+        plat(x-gap+1,py,Math.max(2,gap-2));
+        coin(x-gap+1,py-1,Math.max(2,gap-2));
+        if(R()<.4) spawn(x-gap/2,py);
+        if(oTier>=5) for(let i=1;i<gap-1;i++) if(R()<.3) m[py+1][x-gap+i]=5;
+      } else {
+        const l=5+(R()*3|0), s=x;
+        for(let i=0;i<l;i++) col(x++,gh);
+        coin(s+1,gh-2,Math.max(1,l-2));
+        if(R()<.6) spawn(s+2,gh);
+      }
+      if(x<cols) for(let y=0;y<3;y++) m[y][x]=1;
     }
   }
 
-  while(x<cols)col(x++,gh);
+  while(x<cols) col(x++,gh);
   en({k:'g',x:(cols-5)*T,y:(gh-3)*T,w:32,h:96});
 
-  /* Spawn point depends on layout so player never spawns inside terrain */
+  /* spawn Y depends on starting gh of the layout */
   let spawnY;
-  if(layout===4) spawnY=5*T-30;      /* descent starts high (gh=6) */
-  else if(layout===2) spawnY=12*T-30; /* staircase starts at gh=13 */
-  else spawnY=11*T-30;                /* default gh=12 */
+  if(layout===4) spawnY=5*T-30;
+  else if(layout===2) spawnY=11*T-30;
+  else spawnY=10*T-30;
   return {m,cols,E,C,th,n,bs,sp:{x:2*T,y:spawnY}};
 }
 
@@ -468,7 +474,7 @@ B('✦  NEW GAME',330,272,300,50,()=>{nameInput='';scr='name';sel=0},'bold 24px'
 B('🏆  SCOREBOARD',330,330,300,46,()=>{returnTo='cover';scr='scores';sel=0;cloudMerge()},'bold 19px');
 B('📖  RULE BOOK',330,384,300,46,()=>{returnTo='cover';scr='rules';sel=0},'bold 19px');
 ctr(SYNC_URL?'🌐 Live sync ON — scores update everywhere':'⚠ No cloud sync',460,12,SYNC_URL?'#4caf50':'#ffc107');
-ctr('v9.1  ·  '+MAXLV+' Unique Lands',520,12,'#fff6');
+ctr('v9.2  ·  '+MAXLV+' Unique Lands',520,12,'#fff6');
 cloudDot();
 }
 else if(scr=='rules'){
@@ -627,13 +633,11 @@ if(state!='play')return;
 const p=P,i=inp();
 L.E.forEach(e=>{
 if(e.dead)return;
-if(e.k=='m'){
-  e.t+=.02;let nx,ny;
-  if(e.ax>0&&e.ay>0){nx=e.x0+Math.sin(e.t)*e.ax;ny=e.y0+Math.sin(e.t*1.3)*e.ay;}
-  else if(e.ax>0){nx=e.x0+Math.sin(e.t)*e.ax;ny=e.y0;}
-  else{nx=e.x0;ny=e.y0+(e.my?Math.sin(e.t)*e.my:Math.sin(e.t)*e.ay);}
-  e.dx=nx-e.x;e.dy=ny-e.y;e.x=nx;e.y=ny;
-}
+if(e.k=='m'){e.t+=.02;let nx,ny;
+if(e.ax>0&&e.ay>0){nx=e.x0+Math.sin(e.t)*e.ax;ny=e.y0+Math.sin(e.t*1.3)*e.ay;}
+else if(e.ax>0){nx=e.x0+Math.sin(e.t)*e.ax;ny=e.y0;}
+else{nx=e.x0;ny=e.y0+(e.my?Math.sin(e.t)*e.my:Math.sin(e.t)*e.ay);}
+e.dx=nx-e.x;e.dy=ny-e.y;e.x=nx;e.y=ny;}
 if(e.k=='w'){const nx=e.x+e.vx*e.sp,tx=Math.floor((e.vx>0?nx+e.w:nx)/T),ty=Math.floor((e.y+e.h/2)/T),b=tile(tx,Math.floor((e.y+e.h+2)/T));if(tile(tx,ty)==1||b==0||b==3||b==4||b==5)e.vx*=-1;else e.x=nx;}
 if(e.k=='f'){e.t+=.04;e.x=e.x0+Math.sin(e.t)*80-14;e.y=e.y0+Math.sin(e.t*2)*22;}
 if(e.k=='j'){e.jt=(e.jt||0)+1;
@@ -805,7 +809,7 @@ g.font='bold 20px system-ui';g.fillStyle='#fff';g.fillText('✦ ×'+Math.max(0,l
 g.font='bold 15px system-ui';g.textAlign='center';g.fillStyle='#fff';
 g.fillText('Level '+(lvl+1)+' · '+L.th.n,W/2,14);
 g.font='bold 11px system-ui';g.fillStyle='#cfe8ff';
-g.fillText('Layout: '+LAYOUT_NAMES[(lvl*3+Math.floor(lvl/9))%6]+' · Foes T'+Math.min(6,Math.floor(lvl/3)),W/2,30);
+g.fillText('Layout: '+LAYOUT_NAMES[layoutFor(lvl)]+' · Foes T'+Math.min(6,Math.floor(lvl/3)),W/2,30);
 g.textAlign='left';
 g.font='bold 20px system-ui';g.fillStyle='#ffd600';g.fillText('● '+score,620,21);
 g.textAlign='right';g.fillStyle='#ffd600';g.fillText('Bank ◉ '+save.bank,W-14,21);g.textAlign='left';
@@ -847,7 +851,7 @@ g.strokeStyle='#fff6';g.lineWidth=2;g.beginPath();g.roundRect(W-56,52,48,42,8);g
 g.fillStyle=paused?'#222':'#fff';
 if(paused){g.beginPath();g.moveTo(W-44,60);g.lineTo(W-44,86);g.lineTo(W-22,73);g.fill()}
 else{g.fillRect(W-44,60,7,26);g.fillRect(W-30,60,7,26)}
-if(banner>0&&state=='play'){g.globalAlpha=Math.min(1,banner/40);ctr(L.bs?'BOSS FIGHT!':'LEVEL '+(lvl+1),230,64);ctr(L.th.n+'  ·  '+LAYOUT_NAMES[(lvl*3+Math.floor(lvl/9))%6],290,26,'#ffd600');g.globalAlpha=1}
+if(banner>0&&state=='play'){g.globalAlpha=Math.min(1,banner/40);ctr(L.bs?'BOSS FIGHT!':'LEVEL '+(lvl+1),230,64);ctr(L.th.n+'  ·  '+LAYOUT_NAMES[layoutFor(lvl)],290,26,'#ffd600');g.globalAlpha=1}
 if(state=='clear'){
 btns=[];g.fillStyle='#0006';g.fillRect(0,180,W,180);
 ctr('LEVEL CLEAR!',240,72,'#ffd600');
